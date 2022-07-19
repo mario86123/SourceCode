@@ -1,0 +1,4 @@
+Best fitness: 14
+Best solution: 7 17 19 5 0 3 2 10 4 12 6 18 8 9 16 11 14 13 1 15 
+Evaluations performed: 245224
+Time consumed: 0.953036785125732

@@ -1,0 +1,2 @@
+B_ratio = 1
+half_distance = 1
