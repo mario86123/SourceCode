@@ -11,14 +11,16 @@ class result:
 
 repeat_time = 10
 ell_lst = [20, 40, 60]
-pop_size_lst = [5]
+pop_size_lst = [5, 10, 20]
 
 # PSRC = [1, 10]
-PSRC = [1]
 
 
 
 for ell in ell_lst:
+
+    PSRC = [1, int(ell/10), ell]
+
     for pop_size in pop_size_lst:
 
         for psrc in PSRC:
@@ -37,7 +39,7 @@ for ell in ell_lst:
 
             for t in range(repeat_time):
 
-                f = open(f'./{ell}_{ell * pop_size}_{1}_AMR_{t}.txt', 'r')
+                f = open(f'./{ell}_{ell * pop_size}_{psrc}_AMR_{t}.txt', 'r')
                 s = f.read().splitlines()
 
                 best_fitness = float(s[0].split(": ")[1])
@@ -66,7 +68,7 @@ for ell in ell_lst:
 
 
             # print result data
-            print(f'ell: {ell}, population size: {ell * pop_size}, model = AMR:, {1}')
+            print(f'ell: {ell}, population size: {ell * pop_size}, model: AMR:, PSRC: {psrc}')
             print("avg_best_fitness: ", total_best_fitness/repeat_time)
 
             print("best fitness std: ", np.std(fitness_lst))
