@@ -45,6 +45,10 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     m_inverse=inverse;
     
     //2. initialize the population
+    // int tmp[36] = {20, 30, 18, 16, 12, 6, 25, 32, 11, 0, 15, 29, 33, 26, 23, 34, 28, 17, 7, 8, 21, 14, 9, 24, 4, 19, 35, 13, 27, 10, 3, 22, 2, 1, 5};
+    // printf("tmp fitness: ");
+    // cout << m_problem->Evaluate(tmp) << endl;
+
     m_population= new CPopulation(m_pop_size, m_offspring_size, m_problem_size);
     int * genes= new int[m_problem_size];
     for(int i=0; i<m_pop_size; i++)
@@ -62,7 +66,7 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     //cout<<""<<m_population->m_individuals[0]->Value()<<" , "<<m_evaluations<<" , "<<m_max_evaluations-m_evaluations<<endl;
     delete [] genes;
     
-    
+
     //3. Build model structures
     if (((string)model_type)=="M"){
         m_model=new CMallowsModel(m_problem_size, m_sel_size, metric_type);
@@ -121,7 +125,6 @@ int RankingEDA::Run(){
     int iterations=1;
     float rate=0.001;
     float population_avg_fitness = -100000000;
-
 
     // double * pop_entropy_arr = new double[ m_problem_size * m_problem_size / m_pop_size * 1000];
 

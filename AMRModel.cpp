@@ -104,8 +104,8 @@ CAMRModel::~CAMRModel()
 
     // --- write file ---//
     ofstream output_file;
-    output_file.open("./genes_entropy/entropy/" + std::to_string(m_problem_size) + "_" + std::to_string(m_sample_size) + "_" + std::to_string(m_previous_sampled_reference_count) + "_" + std::to_string(m_seed) + ".txt");
-    // output_file.open("./genes_entropy.txt");
+    // output_file.open("./genes_entropy/entropy/" + std::to_string(m_problem_size) + "_" + std::to_string(m_sample_size) + "_" + std::to_string(m_previous_sampled_reference_count) + "_" + std::to_string(m_seed) + ".txt");
+    output_file.open("./genes_entropy.txt");
 
     for (int i = 0; i < m_problem_size; ++i) {
         output_file << i << ": " << endl;

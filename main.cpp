@@ -19,6 +19,9 @@
 #include "SDF.h"
 #include "GAP.h"
 
+#include "VRP.h"
+// #include "VRPTW.h"
+
 //It is the instance of the problem to optimize.
 PBP * PROBLEM;
 
@@ -168,7 +171,7 @@ int GetOption (int argc, char** argv, char* pszValidOpts, char** ppszParam)
  */
 void usage(char *progname)
 {
-    cout << "Algorithm -i <instance_name> -o <results_name> -s <seed> -t <problem_type> -m <model_type> -d <metric> -v <inverse> -p <population_size> -e <max_evaluations> -b <b_ratio> -c <cut_point_count>" <<endl;
+    cout << "Algorithm -i <instance_name> -o <results_name> -s <seed> -t <problem_type> -m <model_type> -d <metric> -v <inverse> -p <population_size> -e <max_evaluations> -b <b_ratio> -c <cut_point_count> -r <previous sampled reference count>" <<endl;
     cout <<"   -i File name of the instance.\n"<<endl;
     cout <<"   -o Name of the file to store the results.\n"<<endl;
     cout <<"   -s Seed to be used for pseudo-random numbers generator.\n"<<endl;
@@ -178,8 +181,9 @@ void usage(char *progname)
     cout <<"   -v inverse (0<- no inverse, 1<- inverse)."<<endl;
     cout <<"   -p population size."<<endl;
     cout <<"   -e max_evaluation."<<endl;
-    cout <<"   -b b_ratio."<<endl;
-    cout <<"   -c cut_point_count."<<endl;
+    cout <<"   -b b_ratio. (virtual sampling)"<<endl;
+    cout <<"   -c cut_point_count. (MR model only)"<<endl;
+    cout <<"   -r previous sampled reference count. (AMR model only)"<<endl;
 
 }
 
@@ -318,6 +322,10 @@ PBP * GetProblemInfo(string problemType, string filename)
         problem= new SDF();
     else if (problemType=="GAP") // GA project fitness Function
         problem= new GAP();
+    else if (problemType=="VRP") // Vehicle Routing Problem
+        problem= new VRP();
+    // else if (problemType=="VRPTW") // Vehicle Routing Problem with Time Window 
+    //     problem= new VRPTW();
     else{
         cout<<"Wrong problem type was specified."<<endl;
         exit(1);

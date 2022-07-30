@@ -2,10 +2,10 @@ CC = g++ -O2 -Wno-deprecated
 
 all: RankingEDAsCEC
 
-RankingEDAsCEC: main.o PBP.o PFSP.o LOP.o QAP.o TSP.o API.o SDF.o GAP.o Tools.o Cayley.o Distance.o Kendall.o GeneralizedKendall.o GeneralizedDistance.o RankingModel.o GeneralizedMallowsModel.o MallowsModel.o BWModel.o MRModel.o EHBSAWO.o EHBSAWT.o MRWT.o AMRModel.o Population.o Individual.o RankingEDA.o GeneralizedCayley.o Ferrers_diagram.o Ferrers_diagram2.o Generic.o Ulam.o Ulam2.o NewtonRaphson.o
-	$(CC)  main.o PBP.o PFSP.o LOP.o QAP.o TSP.o API.o SDF.o GAP.o Tools.o Cayley.o Distance.o Kendall.o GeneralizedKendall.o GeneralizedDistance.o RankingModel.o GeneralizedMallowsModel.o MallowsModel.o BWModel.o MRModel.o EHBSAWO.o EHBSAWT.o MRWT.o AMRModel.o Population.o Individual.o RankingEDA.o GeneralizedCayley.o Ferrers_diagram.o Ferrers_diagram2.o Generic.o Ulam.o Ulam2.o NewtonRaphson.o -lstdc++ -lm -o RankingEDAsCEC
+RankingEDAsCEC: main.o PBP.o PFSP.o LOP.o QAP.o TSP.o API.o SDF.o GAP.o VRP.o Tools.o Cayley.o Distance.o Kendall.o GeneralizedKendall.o GeneralizedDistance.o RankingModel.o GeneralizedMallowsModel.o MallowsModel.o BWModel.o MRModel.o EHBSAWO.o EHBSAWT.o MRWT.o AMRModel.o Population.o Individual.o RankingEDA.o GeneralizedCayley.o Ferrers_diagram.o Ferrers_diagram2.o Generic.o Ulam.o Ulam2.o NewtonRaphson.o
+	$(CC)  main.o PBP.o PFSP.o LOP.o QAP.o TSP.o API.o SDF.o GAP.o VRP.o Tools.o Cayley.o Distance.o Kendall.o GeneralizedKendall.o GeneralizedDistance.o RankingModel.o GeneralizedMallowsModel.o MallowsModel.o BWModel.o MRModel.o EHBSAWO.o EHBSAWT.o MRWT.o AMRModel.o Population.o Individual.o RankingEDA.o GeneralizedCayley.o Ferrers_diagram.o Ferrers_diagram2.o Generic.o Ulam.o Ulam2.o NewtonRaphson.o -lstdc++ -lm -o RankingEDAsCEC
 
-main.o: main.cpp RankingEDA.h PBP.h PFSP.h LOP.h QAP.h TSP.h API.h SDF.h GAP.h
+main.o: main.cpp RankingEDA.h PBP.h PFSP.h LOP.h QAP.h TSP.h API.h SDF.h GAP.h VRP.h
 	$(CC) -c main.cpp
  
 Cayley.o: Cayley.cpp Cayley.h Tools.h Distance.h Variables.h NewtonRaphson.h
@@ -103,6 +103,9 @@ SDF.o: SDF.cpp SDF.h Tools.h PBP.h
 
 GAP.o: GAP.cpp GAP.h Tools.h PBP.h                        
 	$(CC) -c GAP.cpp
+
+VRP.o: VRP.cpp VRP.h Tools.h PBP.h                        
+	$(CC) -c VRP.cpp
 	
 NewtonRaphson.o: NewtonRaphson.cpp NewtonRaphson.h                         
 	$(CC) -c NewtonRaphson.cpp

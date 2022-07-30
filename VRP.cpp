@@ -1,0 +1,204 @@
+// GA project fitness function
+
+#include "VRP.h"
+
+// #define for_(i, a, b) for (int i=(a);i<(b);++i)
+#define sqr(a) (a)*(a)
+
+/*
+ *Class constructor.
+ */
+VRP::VRP()
+{
+	
+}
+
+/*
+ * Class destructor.
+ */
+VRP::~VRP()
+{
+    for (int i = 0; i < m_size; i++)
+        delete [] cost[i];
+    delete [] cost;
+    delete [] demand;
+
+}
+
+
+
+int VRP::Read(string filename)
+{
+    string line;
+    ifstream file(filename);
+        
+    while (file) {
+        getline(file, line);
+        
+        if (line.empty()) continue;
+        
+        string key_word, x;
+        istringstream ss(line);
+        
+        ss >> key_word;
+        
+        if (key_word == "DIMENSION") {
+            
+            ss >> x >> numCustomer;
+            
+            cost = new double * [numCustomer];
+            for (int i = 0; i < numCustomer; i++)
+            {
+                cost[i]= new double[numCustomer];
+            }
+
+            demand = new int[numCustomer];
+        }
+
+        else if (key_word == "CAPACITY") {
+            ss >> x >> capacity;
+        }
+
+        else if (key_word == "TRUCKS") {
+            ss >> x >> numTrucks;
+            m_size = numTrucks + numCustomer - 1;
+        }
+
+        else if (key_word == "NODE_COORD_SECTION") {
+            
+            vector<int> x(numCustomer), y(numCustomer);
+            
+            int a, b, c;
+            for (;;) {
+                getline(file, line);
+                
+                if (line[0] == 'D')
+                break;
+                
+                istringstream ss(line);
+                
+                ss >> a >> b >> c;
+                
+                x[a-1] = b;
+                y[a-1] = c;
+            }
+            
+            for(int i = 0; i < numCustomer; i++) {
+                for(int j = 0; j < numCustomer; j++) {
+                    double dist2 = sqr(x[i]-x[j]) + sqr(y[i]-y[j]);
+                    double dist = sqrt(dist2);
+                    cost[i][j] = floor(dist + 0.5);
+                    cost[j][i] = floor(dist + 0.5);
+                }
+            }
+            
+            // DEMAND_SECTION
+            
+            for (;;) {
+                getline(file, line);
+                
+                if (line[0] == 'D')
+                break;
+                
+                istringstream ss(line);
+                int v, d;
+                ss >> v >> d;
+                demand[v-1] = d;
+            }
+        
+        }
+    }
+
+	return m_size;
+}
+
+
+#define K 0
+/*
+ * This function evaluates the individuals for the QAP problem.
+ */
+double VRP::Evaluate(int * genes)
+{
+    stack<int> route;  
+    int* weight = new int[numTrucks];
+    double* length = new double[numTrucks];
+    
+    int vehicle = 0;
+    
+    while(!route.empty())
+        route.pop();
+
+    for(int i = 0; i <= m_size; i++)
+    {
+        int index;
+
+        if (i < m_size){
+            index = genes[i];
+        }
+        else {
+            index = m_size;
+        }
+
+        if (index < numCustomer) {
+            route.push(index);
+        }
+        else 
+        {
+            
+            if (route.empty())
+            {
+                length[vehicle] = 0.0;
+                weight[vehicle] = 0;
+            } // if
+            else
+            {
+                int w = 0;
+                double l = 0.0;
+                int top = 0;
+
+                while(!route.empty())
+                {
+                    int next = route.top();
+                    route.pop();                 
+                    l += cost[next][top];                 
+                    w += demand[next]; 
+                    top = next;            
+                } // while
+                l += cost[0][top];                
+                
+                // printf("l: %lf\n", l);
+                length[vehicle] = l;
+                weight[vehicle] = w;
+
+                vehicle++;                
+            } // else
+        } // else
+    } // for
+    
+    double fitness = 0.0;
+    for (int i = 0; i < vehicle; i++)
+    {
+        double exceed = (double)(weight[i] - capacity) / ((double)capacity);
+        double penalty = K * length[i] * exceed;
+        double fitness_i = length[i] + max(0.0, penalty);
+        fitness += fitness_i;
+    }
+    return -fitness;
+
+}
+
+/*
+ * This function evaluates the inverted solution of the given individual for the QAP problem.
+ */
+double VRP::EvaluateInv(int * genes)
+{
+    return 0;
+}
+
+/*
+ * Returns the size of the problem.
+ */
+int VRP::GetProblemSize()
+{
+    return m_size;
+}
