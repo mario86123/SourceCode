@@ -142,8 +142,8 @@ int RankingEDA::Run(){
     //               or reach global optimal
     // while (m_evaluations<m_max_evaluations && newScore > population_avg_fitness) {
     // while ( m_evaluations<m_max_evaluations && !(m_population->Same(m_pop_size)) ){
-    while (m_evaluations<m_max_evaluations && population_avg_fitness < m_problem_size) {
-        
+    // while (m_evaluations<m_max_evaluations && population_avg_fitness < m_problem_size) {
+    while (m_evaluations<m_max_evaluations) {        
         //learn model
         m_model->Learn(m_population, m_sel_size); // m_sel_size == m_pop_size
 
