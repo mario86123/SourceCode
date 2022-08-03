@@ -15,6 +15,8 @@
 #include "BWModel.h"
 #include "MRModel.h"
 #include "AMRModel.h"
+#include "MSTModel.h"
+#include "MSTME.h"
 #include "EHBSAWO.h"
 #include "EHBSAWT.h"
 #include "MRWT.h"
@@ -86,6 +88,14 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     else if (((string)model_type)=="AMR") // Accumulate MR Model
     {
         m_model=new CAMRModel(m_problem_size, m_sel_size, b_ratio, previous_sampled_reference_count, seed);
+    }
+    else if (((string)model_type)=="MST") // Accumulate MR Model
+    {
+        m_model=new CMSTModel(m_problem_size, m_sel_size, b_ratio);
+    }
+    else if (((string)model_type)=="MSTME") // Accumulate MR Model
+    {
+        m_model=new CMSTME(m_problem_size, m_sel_size, b_ratio);
     }
     else if (((string)model_type)=="EO") // EHBSA WO
     {

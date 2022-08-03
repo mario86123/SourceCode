@@ -763,6 +763,32 @@ void PrintMRMatrix(double ***matrix, int ell) {
     }
 }
 
+void PrintMSTEdgeMatrix(double ***matrix, int ell) {
+    printf("\n=============\n\n");
+    for (int reference_node_num = 0; reference_node_num < ell; ++reference_node_num) {
+        printf("reference_node: %d\n", reference_node_num);
+        printf("N/D|");
+
+        for (int distance = 0; distance < ell; ++distance) {
+             printf("%5d", distance);
+        }
+        printf("\n");
+        for (int distance = 0; distance <= ell; ++distance) { 
+            printf("-----");
+        }
+        printf("\n");
+        for (int next_node_num = 0; next_node_num < ell; ++next_node_num) { 
+            printf("%3d|", next_node_num);
+            for (int distance = 0; distance < ell; ++distance) { 
+                printf("%5.1lf", matrix[reference_node_num][next_node_num][distance]);
+            }
+            printf("   => entropy: %3lf", calculate_entropy(matrix[reference_node_num][next_node_num], ell));
+            printf("\n");
+        }
+        printf("\n");
+    }
+}
+
 void buildModel(int **pop, int pop_size, double **ehm, int ell) {
 
 	for (int individual_num = 0; individual_num < pop_size; ++individual_num) {

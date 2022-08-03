@@ -267,10 +267,10 @@ bool CAMRModel::Learn(CPopulation * population, int size)
 void CAMRModel::Sample(int * genes)
 {
 
-    // record whether an idx is sampled
+    // record idx number that is sampled
     int *already_sampled_idx= new int[m_problem_size];
 
-    // record whether a node is sampled
+    // record node number that is sampled
     int *already_sampled_node= new int[m_problem_size];
 
     for(int i = 0; i < m_problem_size; ++i){
