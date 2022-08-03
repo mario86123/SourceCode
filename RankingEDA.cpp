@@ -264,9 +264,9 @@ int RankingEDA::Run(){
         // }
 
         // *** if the best fitness equal to the population average fitness
-        if ( m_problem_size <= population_avg_fitness ) {
-            m_real_converge_evaluations = m_evaluations;
-        }
+        // if ( m_problem_size <= population_avg_fitness ) {
+        //     m_real_converge_evaluations = m_evaluations;
+        // }
 
         float modification=0;
         if (newScore>m_best->Value())
