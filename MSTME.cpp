@@ -439,6 +439,10 @@ void CMSTME::Sample(int * genes)
         // == end of update information
         // --- end of find min entropy element in edge stack --- //
 
+        for(int i = 0; i < m_problem_size; ++i){
+            delete[] candidate_node_list_arr[i];
+        }
+        delete[] candidate_node_list_arr;
 
 
 
