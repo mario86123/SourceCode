@@ -1,17 +1,17 @@
 
 
-class result:
-    def __init__(self, best_fitness, best_solution, best_fitness_NFE, converge_NFE, time):
-        self.best_fitness = best_fitness
-        self.best_solution = best_solution
-        self.best_fitness_NFE = best_fitness_NFE
-        self.converge_NFE = converge_NFE
-        self.time = time
+# class result:
+#     def __init__(self, best_fitness, best_solution, best_fitness_NFE, converge_NFE, time):
+#         self.best_fitness = best_fitness
+#         self.best_solution = best_solution
+#         self.best_fitness_NFE = best_fitness_NFE
+#         self.converge_NFE = converge_NFE
+#         self.time = time
 
 repeat_time = 10
 problem_instance_lst = ["gr24", "gr48", "pr76"]
 # ell_lst = [24, 48, 76]
-opt = [-1272, -5046, -108159]
+opt = [-1272, -5046, -108159] # according to EHBSA paper
 pop_size_lst = [60, 120, 240, 480, 960]
 
 
