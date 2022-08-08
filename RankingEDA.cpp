@@ -47,9 +47,16 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     m_inverse=inverse;
     
     //2. initialize the population
-    // int tmp[36] = {20, 30, 18, 16, 12, 6, 25, 32, 11, 0, 15, 29, 33, 26, 23, 34, 28, 17, 7, 8, 21, 14, 9, 24, 4, 19, 35, 13, 27, 10, 3, 22, 2, 1, 5};
-    // printf("tmp fitness: ");
-    // cout << m_problem->Evaluate(tmp) << endl;
+    
+    // where is 0 ??
+    // int tmp[36] = {21, 31, 19, 17, 13, 7, 26, 32, 12, 1, 16, 30, 33, 27, 24, 34, 29, 18, 8, 9, 22, 15, 10, 25, 5, 20, 35, 14, 28, 11, 4, 23, 3, 2, 6, 36};
+    // 21, 31, 19, 17, 13, 7, 26, 32, 
+    // 12, 1, 16, 30, 33,
+    // 27, 24, 34,
+    // 29, 18, 8, 9, 22, 15, 10, 25, 5, 20, 35,
+    // 14, 28, 11, 4, 23, 3, 2, 6, 36
+    // double tmp_fitness = m_problem->Evaluate(tmp);
+    // cout <<"tmp fitness: "<< tmp_fitness << endl;
 
     m_population= new CPopulation(m_pop_size, m_offspring_size, m_problem_size);
     int * genes= new int[m_problem_size];

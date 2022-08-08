@@ -731,7 +731,31 @@ void PrintMatrix(double** matrix_ptr, int size) {
         for(int j = 0; j < size; ++j){
             printf("%5.1lf", matrix_ptr[i][j]);
         }
-        printf("   => entropy: %3lf", calculate_entropy(matrix_ptr[i], size));
+        // printf("   => entropy: %3lf", calculate_entropy(matrix_ptr[i], size));
+        printf("\n");
+    }
+}
+
+void PrintMatrix(int** matrix_ptr, int size) {
+
+    // cout<<"half_relation_distance: " << half_relation_distance << endl;
+    printf("\ni/j|");
+    for(int i = 0; i < size; ++i){
+        printf("    %d", i);
+    }
+    printf("\n----");
+    for(int i = 0; i < size; ++i){
+        printf("-----");
+    }
+    printf("\n");
+
+    for(int i = 0; i < size; ++i){
+        printf("%2d |", i);
+
+        for(int j = 0; j < size; ++j){
+            printf("%5d", matrix_ptr[i][j]);
+        }
+        // printf("   => entropy: %3lf", calculate_entropy(matrix_ptr[i], size));
         printf("\n");
     }
 }

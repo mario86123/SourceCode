@@ -155,6 +155,7 @@ void AllocateMatrixMemory(double **matrix, int ell);
 void freeMatrixMemory(double **matrix, int ell);
 void resetMatrix(double **matrix, int ell, double eps);
 void PrintMatrix(double** matrix_ptr, int size);
+void PrintMatrix(int** matrix_ptr, int size);
 void PrintMRMatrix(double ***matrix, int ell);
 void PrintMSTEdgeMatrix(double ***matrix, int ell);
 void buildModel(int **pop, int pop_size, double **ehm, int ell);

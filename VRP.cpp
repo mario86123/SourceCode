@@ -1,6 +1,7 @@
 // GA project fitness function
 
 #include "VRP.h"
+#include "Tools.h"
 
 // #define for_(i, a, b) for (int i=(a);i<(b);++i)
 #define sqr(a) (a)*(a)
@@ -87,11 +88,13 @@ int VRP::Read(string filename)
                 for(int j = 0; j < numCustomer; j++) {
                     double dist2 = sqr(x[i]-x[j]) + sqr(y[i]-y[j]);
                     double dist = sqrt(dist2);
+                    // cout << "i: " << i << ", j: " << j << " ==> " << dist << endl;
                     cost[i][j] = floor(dist + 0.5);
                     cost[j][i] = floor(dist + 0.5);
                 }
             }
             
+            PrintMatrix(cost, numCustomer);
             // DEMAND_SECTION
             
             for (;;) {
@@ -113,7 +116,7 @@ int VRP::Read(string filename)
 }
 
 
-#define K 0
+#define K 1
 /*
  * This function evaluates the individuals for the QAP problem.
  */
@@ -132,10 +135,11 @@ double VRP::Evaluate(int * genes)
     {
         int index;
 
+        // add genes[i] to route stack
         if (i < m_size){
             index = genes[i];
         }
-        else {
+        else { // add terminal node to route stack
             index = m_size;
         }
 
@@ -144,7 +148,6 @@ double VRP::Evaluate(int * genes)
         }
         else 
         {
-            
             if (route.empty())
             {
                 length[vehicle] = 0.0;
@@ -159,7 +162,8 @@ double VRP::Evaluate(int * genes)
                 while(!route.empty())
                 {
                     int next = route.top();
-                    route.pop();                 
+                    route.pop();
+                    cout << "next: " << next << ", top: " << top << ", cost: " << cost[next][top] << endl;
                     l += cost[next][top];                 
                     w += demand[next]; 
                     top = next;            
