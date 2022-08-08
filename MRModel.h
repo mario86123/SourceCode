@@ -57,7 +57,7 @@ private:
     double *** m_multiple_relation_matrix;  
     
     int first_node_idx;
-    int * first_node_idx_arr;
+    double * first_node_idx_arr;
     
     double m_epsilon;
 };

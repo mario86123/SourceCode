@@ -33,7 +33,7 @@ CMRModel::CMRModel(int problem_size, int sel_size, double b_ratio)
         }
     }
 
-    first_node_idx_arr = new int[m_problem_size]();
+    first_node_idx_arr = new double[m_problem_size]();
 
     // b_ratio = 1 ( if don't know how to set )
     // epsilon = b * ell / pop_siez
@@ -85,7 +85,7 @@ bool CMRModel::Learn(CPopulation * population, int size)
     }
     
     for(int i = 0; i < m_problem_size; ++i) {
-        first_node_idx_arr[i] = 0;
+        first_node_idx_arr[i] = m_epsilon;
     }    
     
     // selection ?????
@@ -140,7 +140,8 @@ bool CMRModel::Learn(CPopulation * population, int size)
         delete [] column_arr;
     }
     // ===== end of scan every column ===== // 
-    
+    // printf("first_node_idx: %d\n", first_node_idx);
+
 
     // for every chromosome in samples, count node number at first_node_idx
     for (int i = 0; i < m_sample_size; ++i){
@@ -192,7 +193,7 @@ void CMRModel::Sample(int * genes)
 
         // sample next node using distance entropy
         // find not sampled yet and lowest entropy column
-        int sampled_dist = -1;
+        // int sampled_dist = -1;
         double min_entropy = 100000;
         double *tmp_arr = new double[m_problem_size]();
         double *best_arr = new double[m_problem_size]();
@@ -231,7 +232,7 @@ void CMRModel::Sample(int * genes)
 
                 if (current_entropy < min_entropy) {
                     min_entropy = current_entropy;
-                    sampled_dist = dist;
+                    // sampled_dist = dist;
                     next_node_idx = tmp_idx;
                     for (int i = 0; i < m_problem_size; ++i){
                         best_arr[i] = tmp_arr[i];

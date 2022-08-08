@@ -1,49 +1,45 @@
 #!/bin/bash
 
+# ProblemSizeArray=("10" "15" "20" "25" "30" "35" "40" "45" "50")
+# ProblemSizeArray=("6" "10" "20" "40" "60")
+# ProblemSizeArray=("20" "40" "60")
 ProblemSizeArray=("24" "48" "76")
-ProblemInstance=("gr24" "gr48" "pr76")
-Emax=("576000" "2304000" "5776000")
-PopulationSizeArray=("60" "120" "240" "480" "960" "1920")
-# PopulationSizeArray=("60" "120" "240" "480" "960")
-B_ratio=("1" "0.1" "0.01" "0.001" "0.0001")
+Problem=("gr24" "gr48" "pr76")
+# ProblemSizeArray=("60")
+# PopulationSizeArray=("2" "3" "5" "10" "20")
+PopulationSizeArray=("5" "10" "20")
+# PopulationSizeArray=("40" "20" "10" "5")
+# PopulationSizeArray=("20" "40" "100")
 
-Cut_point=("2" "3" "4" "5")
+# PreviousSampledReferenceCountArr=("10" "5" "2" "1")
+# PreviousSampledReferenceCountArr=("1" "2" "5" "10")
+# PreviousSampledReferenceCountArr=("1" "10")
+# PreviousSampledReferenceCountArr=("1")
 
+
+# ell
 for ((ell = 0; ell < 3; ell++))
 do
 
-
-  # pop_size
-  for ((pop = 0; pop < 6; pop++))
+  # Population Size
+  for ((pop = 0; pop < 3; pop++))
   do
-
-    # B_ratio
-    for ((b = 0; b < 5; b++))
-    do
-
-      # repeat times
+      # # repeat times
       for ((times = 0; times < 10; times++))
       do
-        
-        # MR
-        echo "ell = ${ProblemSizeArray[$ell]}, pop_size = ${PopulationSizeArray[$pop]}, times = ${times}, b_ratio = ${B_ratio[$b]}"
-        ./RankingEDAsCEC -i ./TSP_instance/"${ProblemInstance[$ell]}".tsp -o ./TSP_result/MR/"${ProblemInstance[$ell]}"_"$((${PopulationSizeArray[$pop]}))"_"${B_ratio[$b]}"_MR_"$times".txt -s "$times" -t TSP -m MR -d U -v 0 -p "$((${PopulationSizeArray[$pop]}))" -e "$((${Emax[$ell]}))" -b "${B_ratio[$b]}"
+          echo "problem = ${Problem[$ell]}, pop_size = "$((${PopulationSizeArray[$pop]} * ${ProblemSizeArray[$ell]}))", times = ${times}, Emax = "$((${ProblemSizeArray[$ell]} * ${ProblemSizeArray[$ell]} * 1000))", model = MR"
 
-        # MRWT
-        for ((cp = 0; cp < 4; cp++))
-        do
-          echo "ell = ${ProblemSizeArray[$ell]}, pop_size = ${PopulationSizeArray[$pop]}, times = ${times}, b_ratio = ${B_ratio[$b]}, cut_point = ${Cut_point[$cp]}"
-          ./RankingEDAsCEC -i ./TSP_instance/"${ProblemInstance[$ell]}".tsp -o ./TSP_result/MRWT"${Cut_point[$cp]}"/"${ProblemInstance[$ell]}"_"$((${PopulationSizeArray[$pop]}))"_"${B_ratio[$b]}"_MRWT"${Cut_point[$cp]}"_"$times".txt -s "$times" -t TSP -m MRWT -d U -v 0 -p "$((${PopulationSizeArray[$pop]}))" -e "$((${Emax[$ell]}))" -b "${B_ratio[$b]}" -c "${Cut_point[$cp]}"
-        done
-        # MRWT end
-      
+          ./RankingEDAsCEC -i ./TSP_instance/"${Problem[$ell]}".tsp\
+                            -o ./TSP_result/MR/"${Problem[$ell]}"_"$((${PopulationSizeArray[$pop]} * ${ProblemSizeArray[$ell]}))"_MR_"$times".txt\
+                            -s "$times"\
+                            -t TSP\
+                            -m MR -d C -v 0\
+                            -p "$((${PopulationSizeArray[$pop]} * ${ProblemSizeArray[$ell]}))"\
+                            -e "$((${ProblemSizeArray[$ell]} * ${ProblemSizeArray[$ell]} * 1000))"\
+                            -b 0.1
       done
       # repeat times end
-
-    done
-    # B_ratio end
-
   done
-  # pop_size end
-
+   # Population Size end
 done
+# ell end
