@@ -48,13 +48,23 @@ int LOP::Read(string filename)
 		string sline;
 		ss << line;
 		ss >> sline;
+		// cout << "num: " << num  << "sline: " << sline <<  endl;
+
 		if (sline=="")
 		{
 			break;
 		}
 		if (num==0)
 		{
+			num++;
+			continue;
+		}
+		if (num==1)
+		{
+			// cout << "line: " << line <<  endl;
+
 			m_problemsize = atoi(line);
+			// cout << "m_problemsize: " << m_problemsize <<  endl;
 		}
 		else
 		{
@@ -76,6 +86,7 @@ int LOP::Read(string filename)
     m_aux= new int[m_problemsize];
     
 	istringstream iss(data);
+	// cout << "data: " << data << endl;
 	int i=0;
 	int j=0;
 	do
@@ -84,9 +95,11 @@ int LOP::Read(string filename)
 	    iss >> sub;
 	    if (sub!=""){
 			//save distance in distances matrix.
+			// cout << "i: " << i << ", j: " << j << "sub: " << sub << " ";
 	    	m_matrix[i][j]= atoi(sub.c_str());
 	    	if (j==(m_problemsize-1))
 	    	{
+				// cout << endl;
 	    		i++;
 	    		j=0;
 	    	}
@@ -109,6 +122,8 @@ int LOP::Read(string filename)
     }
     int aux[100]={69,11,39,29,73,84,45,7,15,43,12,31,56,36,77,22,18,61,58,64,40,1,14,46,8,42,16,51,88,48,9,54,35,50,0,80,74,83,70,96,37,20,34,99,91,97,94,32,90,62,81,26,19,10,59,53,86,82,85,25,68,66,92,47,65,33,30,63,79,98,41,71,2,52,13,44,75,57,93,49,4,23,78,38,87,21,89,17,27,55,28,72,5,3,6,60,67,24,95,76};
     cout<<Evaluate(aux)<<endl;exit(1);*/
+	// cout << "here !!!" << endl;
+	// PrintMatrix(m_matrix, m_problemsize);
 	return (m_problemsize);
 }
 
@@ -134,9 +149,11 @@ double LOP::Evaluate(int * genes)
 {
 	double fitness=0;
     int i,j;
-	for (i=0;i<m_problemsize-1;i++)
-		for (j=i+1;j<m_problemsize;j++)
+	for (i=0;i<m_problemsize-1;i++) {
+		for (j=i+1;j<m_problemsize;j++) {
 			fitness+= m_matrix[genes[i]][genes[j]];
+		}
+	}
 	return fitness;
 }
 

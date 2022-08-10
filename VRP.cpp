@@ -1,4 +1,3 @@
-// GA project fitness function
 
 #include "VRP.h"
 #include "Tools.h"
@@ -62,7 +61,10 @@ int VRP::Read(string filename)
 
         else if (key_word == "TRUCKS") {
             ss >> x >> numTrucks;
-            m_size = numTrucks + numCustomer - 1;
+            m_size = numTrucks + numCustomer - 2;
+            // cout << "numCustomer: " << numCustomer << endl; 
+            // cout << "numTrucks: " << numTrucks << endl; 
+
         }
 
         else if (key_word == "NODE_COORD_SECTION") {
@@ -94,7 +96,7 @@ int VRP::Read(string filename)
                 }
             }
             
-            PrintMatrix(cost, numCustomer);
+            // PrintMatrix(cost, numCustomer);
             // DEMAND_SECTION
             
             for (;;) {
@@ -111,7 +113,7 @@ int VRP::Read(string filename)
         
         }
     }
-
+    // cout << "m_size: " << m_size << endl; 
 	return m_size;
 }
 
@@ -137,17 +139,20 @@ double VRP::Evaluate(int * genes)
 
         // add genes[i] to route stack
         if (i < m_size){
-            index = genes[i];
+            index = genes[i] + 1;
         }
         else { // add terminal node to route stack
-            index = m_size;
+            index = m_size + 1;
         }
+        // cout << "index: " << index << endl;
 
         if (index < numCustomer) {
+            // route.push(index);
             route.push(index);
         }
         else 
         {
+            // cout << "index: " << index << endl;
             if (route.empty())
             {
                 length[vehicle] = 0.0;
@@ -163,7 +168,7 @@ double VRP::Evaluate(int * genes)
                 {
                     int next = route.top();
                     route.pop();
-                    cout << "next: " << next << ", top: " << top << ", cost: " << cost[next][top] << endl;
+                    // cout << "next: " << next << ", top: " << top << ", cost: " << cost[next][top] << endl;
                     l += cost[next][top];                 
                     w += demand[next]; 
                     top = next;            
@@ -174,7 +179,9 @@ double VRP::Evaluate(int * genes)
                 length[vehicle] = l;
                 weight[vehicle] = w;
 
-                vehicle++;                
+                vehicle++;     
+                // PrintArray(length, numTrucks);           
+                // PrintArray(weight, numTrucks);           
             } // else
         } // else
     } // for
@@ -185,8 +192,11 @@ double VRP::Evaluate(int * genes)
         double exceed = (double)(weight[i] - capacity) / ((double)capacity);
         double penalty = K * length[i] * exceed;
         double fitness_i = length[i] + max(0.0, penalty);
+        // cout << " max(0.0, penalty): " << max(0.0, penalty) << endl;
         fitness += fitness_i;
+        // cout << i << ") length[i]: "<< length[i] <<", penalty: " << penalty << ", fitness_i: " << fitness_i << endl;
     }
+    // cout << endl;
     return -fitness;
 
 }

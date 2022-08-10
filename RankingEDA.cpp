@@ -49,14 +49,29 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     //2. initialize the population
     
     // where is 0 ??
-    // int tmp[36] = {21, 31, 19, 17, 13, 7, 26, 32, 12, 1, 16, 30, 33, 27, 24, 34, 29, 18, 8, 9, 22, 15, 10, 25, 5, 20, 35, 14, 28, 11, 4, 23, 3, 2, 6, 36};
-    // 21, 31, 19, 17, 13, 7, 26, 32, 
-    // 12, 1, 16, 30, 33,
-    // 27, 24, 34,
-    // 29, 18, 8, 9, 22, 15, 10, 25, 5, 20, 35,
-    // 14, 28, 11, 4, 23, 3, 2, 6, 36
+    // why add 35 at tail??
+    // int tmp[35] = {20, 30, 18, 16, 12, 6, 25, 31, 11, 0, 15, 29, 32, 26, 23, 33, 28, 17, 7, 8, 21, 14, 9, 24, 4, 19, 34, 13, 27, 10, 3, 22, 2, 1, 5};
+    // int tmp[35] = {29, 11, 15, 13, 23, 26, 33, 6, 12, 16, 18, 30, 20, 0, 34, 31, 19, 4, 24, 9, 14, 8, 21, 28, 32, 17, 7, 10, 3, 27, 22, 2, 1, 5, 25};
     // double tmp_fitness = m_problem->Evaluate(tmp);
     // cout <<"tmp fitness: "<< tmp_fitness << endl;
+    
+    // int tmp_1[36] = {34, 20, 30, 18, 16, 12, 6, 33, 35, 26, 28, 14, 9, 24, 4, 19, 31, 23, 13, 25, 15, 0, 11, 29, 32, 5, 2, 1, 22, 27, 3, 10, 7, 17, 8, 21};
+    // double tmp_1_fitness = m_problem->Evaluate(tmp_1);
+    // cout <<"tmp_1 fitness: "<< tmp_1_fitness << endl;
+
+
+    // int tmp_1[36] = {3, 25, 6, 7, 12, 31, 1, 35, 28, 15, 2, 8, 16, 14, 34, 22, 27, 17, 21, 32, 10, 30, 0, 20, 13, 18, 5, 23, 33, 19, 4, 26, 24, 29, 9, 11};
+    // double tmp_1_fitness = m_problem->Evaluate(tmp_1);
+    // cout <<"tmp_1 fitness: "<< tmp_1_fitness << endl << endl;
+
+    // int tmp[36] = {14, 16, 8, 2, 15, 28, 32, 11, 4, 25, 6, 7, 12, 31, 1, 33, 19, 3, 26, 24, 29, 9, 34, 22, 27, 17, 21, 35, 23, 5, 18, 13, 20, 0, 30, 10};
+    // double tmp_fitness = m_problem->Evaluate(tmp);
+    // cout <<"tmp fitness: "<< tmp_fitness << endl;
+
+    // int tmp_1[37] = {21, 34, 28, 15, 2, 8, 16, 14, 35, 11, 4, 26,24, 29, 9, 33, 10, 17, 27, 22, 32, 30, 0,20, 13, 18, 5, 23, 36, 19, 3, 25, 6, 7, 12, 31, 1};
+    // double tmp_1_fitness = m_problem->Evaluate(tmp_1);
+    // cout <<"tmp_1 fitness: "<< tmp_1_fitness << endl;
+
 
     m_population= new CPopulation(m_pop_size, m_offspring_size, m_problem_size);
     int * genes= new int[m_problem_size];
@@ -72,7 +87,7 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     }
     
     m_population->SortPopulation(0);
-    //cout<<""<<m_population->m_individuals[0]->Value()<<" , "<<m_evaluations<<" , "<<m_max_evaluations-m_evaluations<<endl;
+    // cout<<""<<m_population->m_individuals[0]->Value()<<" , "<<m_evaluations<<" , "<<m_max_evaluations-m_evaluations<<endl;
     delete [] genes;
     
 
