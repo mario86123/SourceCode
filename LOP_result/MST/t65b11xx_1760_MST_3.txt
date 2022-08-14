@@ -1,0 +1,5 @@
+Best fitness: 409364
+Best solution: 43 3 33 1 4 5 23 39 8 24 35 34 32 13 27 28 30 0 37 2 6 9 25 12 10 16 15 21 11 20 22 19 7 26 36 17 18 29 38 42 14 31 41 40 
+Evaluations performed: 1012000
+Converge NFE: 538970672
+Time consumed: 1031.68290114403

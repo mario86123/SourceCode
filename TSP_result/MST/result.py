@@ -19,7 +19,7 @@ ell_lst = [24, 48]
 opt = [-1272, -5046] # according to EHBSA paper
 
 # pop_size_lst = [5, 10, 20, 40]
-pop_size_lst = [10, 20, 40]
+pop_size_lst = [10, 20, 40, 80, 160]
 
 
 for i in range(len(problem_instance_lst)):
