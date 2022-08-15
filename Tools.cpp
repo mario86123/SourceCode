@@ -712,6 +712,18 @@ void resetMatrix(double **matrix, int ell, double eps) { // eps: epsilon
 		}
     }
 }
+void resetNHM(double **matrix, int ell, double eps) { // eps: epsilon
+
+	// todo: B_ratio
+	// todo: B_ratio
+	// todo: B_ratio
+
+    for (int i = 0; i < ell; ++i) {
+        for (int j = 0; j < ell; ++j) {
+            matrix[i][j] = eps;
+		}
+    }
+}
 void PrintMatrix(double** matrix_ptr, int size) {
 
     // cout<<"half_relation_distance: " << half_relation_distance << endl;
@@ -813,6 +825,7 @@ void PrintMSTEdgeMatrix(double ***matrix, int ell) {
     }
 }
 
+// build EHM
 void buildModel(int **pop, int pop_size, double **ehm, int ell) {
 
 	for (int individual_num = 0; individual_num < pop_size; ++individual_num) {
@@ -835,4 +848,14 @@ void buildModel(int **pop, int pop_size, double **ehm, int ell) {
 
 		}
 	}
+}
+
+// build NHM
+void buildNHM(int **pop, int pop_size, double **nhm, int ell) {
+
+    for (int individual_num = 0; individual_num < pop_size; ++individual_num) {
+        for (int idx = 0; idx < ell; idx++) {
+            nhm [idx] [ pop[individual_num][idx] ] ++;
+        }
+    }
 }

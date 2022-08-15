@@ -19,6 +19,8 @@
 #include "MSTME.h"
 #include "EHBSAWO.h"
 #include "EHBSAWT.h"
+#include "NHBSAWO.h"
+#include "NHBSAWT.h"
 #include "MRWT.h"
 /*
  * The constructor.
@@ -56,26 +58,6 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     // cout <<"tmp fitness: "<< tmp_fitness << endl;
     
     // int tmp_1[36] = {34, 20, 30, 18, 16, 12, 6, 33, 35, 26, 28, 14, 9, 24, 4, 19, 31, 23, 13, 25, 15, 0, 11, 29, 32, 5, 2, 1, 22, 27, 3, 10, 7, 17, 8, 21};
-    // double tmp_1_fitness = m_problem->Evaluate(tmp_1);
-    // cout <<"tmp_1 fitness: "<< tmp_1_fitness << endl;
-
-
-    // int tmp_1[36] = {3, 25, 6, 7, 12, 31, 1, 35, 28, 15, 2, 8, 16, 14, 34, 22, 27, 17, 21, 32, 10, 30, 0, 20, 13, 18, 5, 23, 33, 19, 4, 26, 24, 29, 9, 11};
-    // double tmp_1_fitness = m_problem->Evaluate(tmp_1);
-    // cout <<"tmp_1 fitness: "<< tmp_1_fitness << endl << endl;
-
-    // int tmp[36] = {14, 16, 8, 2, 15, 28, 32, 11, 4, 25, 6, 7, 12, 31, 1, 33, 19, 3, 26, 24, 29, 9, 34, 22, 27, 17, 21, 35, 23, 5, 18, 13, 20, 0, 30, 10};
-    // double tmp_fitness = m_problem->Evaluate(tmp);
-    // cout <<"tmp fitness: "<< tmp_fitness << endl;
-
-    // int tmp_1[37] = {21, 34, 28, 15, 2, 8, 16, 14, 35, 11, 4, 26,24, 29, 9, 33, 10, 17, 27, 22, 32, 30, 0,20, 13, 18, 5, 23, 36, 19, 3, 25, 6, 7, 12, 31, 1};
-    // double tmp_1_fitness = m_problem->Evaluate(tmp_1);
-    // cout <<"tmp_1 fitness: "<< tmp_1_fitness << endl;
-
-    // int tmp_1[44] = {34,  25,   4,  28,  24,  35,   2,  31,   3,   5,  40,  33,  29,   8,   7,  12,  10,   9,  13,  11,   1,  16,  22,  23,  15,  32,  27,  20,  17,  18,  21,  26,  19,  14,  37,  41,   6,  30,  36,  38,  39,  42,  43,  44};
-    // for (int i = 0; i < 44; i ++) {
-    //     tmp_1[i] -= 1;
-    // }
     // double tmp_1_fitness = m_problem->Evaluate(tmp_1);
     // cout <<"tmp_1 fitness: "<< tmp_1_fitness << endl;
 
@@ -133,6 +115,14 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     {
         m_model=new CEHBSAWT(m_problem_size, m_sel_size, b_ratio, cut_point_count);
     }
+    else if (((string)model_type)=="NO") // NHBSA WO
+    {
+        m_model=new CNHBSAWO(m_problem_size, m_sel_size, b_ratio);
+    }
+    else if (((string)model_type)=="NT") // EHBSA WT
+    {
+        m_model=new CNHBSAWT(m_problem_size, m_sel_size, b_ratio, cut_point_count);
+    }
     else if (((string)model_type)=="MRWT") // MRModel With Template
     {
         m_model=new CMRWT(m_problem_size, m_sel_size, b_ratio, cut_point_count);
@@ -187,7 +177,8 @@ int RankingEDA::Run(){
         //sample the model.
 
         // edge model "without" template
-        if (((string)m_model_type)=="EO") {
+        if (((string)m_model_type)=="EO" || \
+            ((string)m_model_type)=="NO") {
             for (i=0;i< m_offspring_size && m_evaluations<m_max_evaluations;i++){
                 
                 // template == m_population->m_individuals[i]->Genes()
@@ -213,6 +204,7 @@ int RankingEDA::Run(){
 
         // models using template
         else if ( ((string)m_model_type)=="ET" || \
+                  ((string)m_model_type)=="NT" || \
                   ((string)m_model_type)=="MRWT" || \
                   ((string)m_model_type)=="MRWFT") 
                   {
