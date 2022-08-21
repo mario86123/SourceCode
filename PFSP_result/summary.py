@@ -62,45 +62,87 @@ opt_lst = [-33623, -125831] # according to EHBSA paper
 
 
 
-
-
 pop_size_lst = [5, 10, 20, 40, 80, 160]
+# pop_size_lst = [1, 3, 5, 10, 20, 40, 80, 160]
 # other_pop_size_lst = [5, 10, 20]
 
-model_lst = ["MR", "MST", "MSTME", "GMC", "MU"]
+model_lst = ["MR", "MST", "MSTME", "GMC", "MU", "EO", "ET5", "NO", "NT5"]
 # model_lst = ["MR", "MST", "MSTME", "GMC", "MU", "ET5"]
 MST_model_lst = ["MST", "MSTME"]
 
 print()
 print(" [[[ ARPD lower, better ]]] ")
 print()
-print("            |  MR  |  MST  | MSTME |  GMC  |   MU  |")
+print("            |  MR  |  MST  | MSTME |  GMC  |   MU  |   EO  |  ET5  |   NO  |  NT5  |")
 # print("              |  MR  | MST | MSTME|  GMC |  MU  |  ET5 |")
 
 for ell_count in range(len(problem_instance_lst)):
     
-    print("----------------------------------------------------------")
+    print("------------------------------------------------------------------------------------------------")
 
     for pop_size_count in range(len(pop_size_lst)):
 
         print(f'{problem_instance_lst[ell_count]} |', end=" ")
         print(f'{(ell_lst[ell_count] * pop_size_lst[pop_size_count]):5} |', end=" ")
 
+        for model_count in range(len(model_lst)):
 
-        if pop_size_lst[pop_size_count] < 40:
-            for model_count in range(len(model_lst)):
+            if (model_lst[model_count] == "MR" \
+            and (pop_size_lst[pop_size_count] == 5 \
+              or pop_size_lst[pop_size_count] == 10 \
+              or pop_size_lst[pop_size_count] == 20 )) or \
+                (model_lst[model_count] == "MST" \
+            and (pop_size_lst[pop_size_count] == 10 \
+              or pop_size_lst[pop_size_count] == 20 \
+              or pop_size_lst[pop_size_count] == 40 \
+              or pop_size_lst[pop_size_count] == 80 \
+              or pop_size_lst[pop_size_count] == 160 )) or \
+                (model_lst[model_count] == "MSTME" \
+            and (pop_size_lst[pop_size_count] == 10 \
+              or pop_size_lst[pop_size_count] == 20 \
+              or pop_size_lst[pop_size_count] == 40 \
+              or pop_size_lst[pop_size_count] == 80 \
+              or pop_size_lst[pop_size_count] == 160 )) or \
+                (model_lst[model_count] == "GMC" \
+            and (pop_size_lst[pop_size_count] == 5  \
+              or pop_size_lst[pop_size_count] == 10 \
+              or pop_size_lst[pop_size_count] == 20)) or \
+                (model_lst[model_count] == "MU" \
+            and (pop_size_lst[pop_size_count] == 5  \
+              or pop_size_lst[pop_size_count] == 10 \
+              or pop_size_lst[pop_size_count] == 20)) or \
+                (model_lst[model_count] == "EO" \
+            and (pop_size_lst[pop_size_count] == 5  \
+              or pop_size_lst[pop_size_count] == 10 \
+              or pop_size_lst[pop_size_count] == 20)) or \
+                (model_lst[model_count] == "ET5" \
+            and (pop_size_lst[pop_size_count] == 5  \
+              or pop_size_lst[pop_size_count] == 10 \
+              or pop_size_lst[pop_size_count] == 20)) or \
+                (model_lst[model_count] == "NO" \
+            and (pop_size_lst[pop_size_count] == 5  \
+              or pop_size_lst[pop_size_count] == 10 \
+              or pop_size_lst[pop_size_count] == 20)) or \
+                (model_lst[model_count] == "NT5" \
+            and (pop_size_lst[pop_size_count] == 5  \
+              or pop_size_lst[pop_size_count] == 10 \
+              or pop_size_lst[pop_size_count] == 20)):
+              
                 print(f'{read_arpd(problem_instance_lst[ell_count] , model_lst[model_count], ell_lst[ell_count], pop_size_lst[pop_size_count], opt_lst[ell_count]):5.1f} |', end=" ")
-        
-        else:
-            for model_count in range(len(model_lst)):
-                if model_lst[model_count] in MST_model_lst:
-                    print(f'{read_arpd(problem_instance_lst[ell_count] , model_lst[model_count], ell_lst[ell_count], pop_size_lst[pop_size_count], opt_lst[ell_count]):5.1f} |', end=" ")
-                else:
-                    print("      |", end=" ")
+            
+            else:
+                print("      |", end=" ")
+
+
+
+
+
+
+
 
 
         print()
 
-print("----------------------------------------------------------")
+print("------------------------------------------------------------------------------------------------")
 # read_avg_fitness(problem, model, ell, pop_size):
 

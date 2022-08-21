@@ -22,6 +22,7 @@
 #include "NHBSAWO.h"
 #include "NHBSAWT.h"
 #include "MRWT.h"
+#include "time.h"
 /*
  * The constructor.
  */
@@ -248,6 +249,9 @@ int RankingEDA::Run(){
         }
 
         else {
+            // time_t s, e;
+            // s = clock();
+
             for (i=0;i< m_offspring_size && m_evaluations<m_max_evaluations;i++){
                 
                 m_model->Sample(genes);
@@ -262,6 +266,10 @@ int RankingEDA::Run(){
             
             // sort population and offspring together (elitism)
             m_population->SortPopulation(1);
+            
+            // e = clock();
+            // cout << "sample time: " << s - e << endl << endl;
+
         }
 
         // printf("3: \n");

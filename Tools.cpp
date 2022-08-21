@@ -540,13 +540,17 @@ double calculate_entropy(int *arr, int arr_size) {
     
     int sum = 0;
     for (int i = 0; i < arr_size; i ++) {
-        sum += arr[i];
+        if (arr[i] != 0) {
+        // if (arr[i]) {
+            sum += arr[i];
+        }
     }
 
     double entropy = 0;
     for (int i = 0; i < arr_size; i ++) {
         
         if (arr[i] != 0) {
+        // if (arr[i]) {
             double p = double(arr[i]) / sum;
             entropy += p * log(p); // nature log
         }
