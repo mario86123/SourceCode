@@ -1,0 +1,12 @@
+#PBS -S /bin/bash
+#PBS -q long
+#PBS -l procs=50,mem=10gb,nice=15,walltime=800:00:00
+#PBS -N LOP_MST
+#PBS -o LOP_MST.out
+#PBS -e LOP_MST.err
+#PBS -m abe
+#PBS -M r10921099@ntu.edu.tw
+
+cd /home/r05h41003/wei/Source\ code/
+./LOP_MST_Cebe_test.sh
+wait
