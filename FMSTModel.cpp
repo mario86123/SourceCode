@@ -588,9 +588,9 @@ void CFMSTModel::Sample(int * genes)
             int already_sampled_node_num_idx;
             // find already_sampled_node_num idx
                 // (can use memory to reduce time)
-            for (int idx = 0; idx < m_problem_size; idx ++) {
-                if (genes[idx] == already_sampled_node_num) {
-                    already_sampled_node_num_idx = idx;
+            for (int i = 0; i < already_sampled_gene_count; i ++) {
+                if (genes[already_used_idx[i]] == already_sampled_node_num) {
+                    already_sampled_node_num_idx = already_used_idx[i];
                     break;
                 }
             }
