@@ -2,8 +2,8 @@ CC = g++ -O2 -Wno-deprecated -std=c++11
 
 all: RankingEDAsCEC
 
-RankingEDAsCEC: main.o PBP.o PFSP.o LOP.o QAP.o TSP.o API.o SDF.o GAP.o VRP.o Tools.o Cayley.o Distance.o Kendall.o GeneralizedKendall.o GeneralizedDistance.o RankingModel.o GeneralizedMallowsModel.o MallowsModel.o BWModel.o MRModel.o EHBSAWO.o NHBSAWO.o EHBSAWT.o NHBSAWT.o MRWT.o AMRModel.o MSTModel.o MSTME.o Population.o Individual.o RankingEDA.o GeneralizedCayley.o Ferrers_diagram.o Ferrers_diagram2.o Generic.o Ulam.o Ulam2.o NewtonRaphson.o
-	$(CC)  main.o PBP.o PFSP.o LOP.o QAP.o TSP.o API.o SDF.o GAP.o VRP.o Tools.o Cayley.o Distance.o Kendall.o GeneralizedKendall.o GeneralizedDistance.o RankingModel.o GeneralizedMallowsModel.o MallowsModel.o BWModel.o MRModel.o EHBSAWO.o NHBSAWO.o EHBSAWT.o NHBSAWT.o MRWT.o AMRModel.o MSTModel.o MSTME.o Population.o Individual.o RankingEDA.o GeneralizedCayley.o Ferrers_diagram.o Ferrers_diagram2.o Generic.o Ulam.o Ulam2.o NewtonRaphson.o -lstdc++ -lm -o RankingEDAsCEC
+RankingEDAsCEC: main.o PBP.o PFSP.o LOP.o QAP.o TSP.o API.o SDF.o GAP.o VRP.o Tools.o Cayley.o Distance.o Kendall.o GeneralizedKendall.o GeneralizedDistance.o RankingModel.o GeneralizedMallowsModel.o MallowsModel.o BWModel.o MRModel.o EHBSAWO.o NHBSAWO.o EHBSAWT.o NHBSAWT.o MRWT.o AMRModel.o FMSTModel.o MSTModel.o MSTME.o Population.o Individual.o RankingEDA.o GeneralizedCayley.o Ferrers_diagram.o Ferrers_diagram2.o Generic.o Ulam.o Ulam2.o NewtonRaphson.o
+	$(CC)  main.o PBP.o PFSP.o LOP.o QAP.o TSP.o API.o SDF.o GAP.o VRP.o Tools.o Cayley.o Distance.o Kendall.o GeneralizedKendall.o GeneralizedDistance.o RankingModel.o GeneralizedMallowsModel.o MallowsModel.o BWModel.o MRModel.o EHBSAWO.o NHBSAWO.o EHBSAWT.o NHBSAWT.o MRWT.o AMRModel.o FMSTModel.o MSTModel.o MSTME.o Population.o Individual.o RankingEDA.o GeneralizedCayley.o Ferrers_diagram.o Ferrers_diagram2.o Generic.o Ulam.o Ulam2.o NewtonRaphson.o -lstdc++ -lm -o RankingEDAsCEC
 
 main.o: main.cpp RankingEDA.h PBP.h PFSP.h LOP.h QAP.h TSP.h API.h SDF.h GAP.h VRP.h
 	$(CC) -c main.cpp
@@ -73,6 +73,9 @@ MRWT.o: MRWT.cpp MRWT.h Individual.h RankingModel.h Population.h Tools.h
 
 AMRModel.o: AMRModel.cpp AMRModel.h Individual.h RankingModel.h Population.h Tools.h
 	$(CC) -c AMRModel.cpp
+
+FMSTModel.o: FMSTModel.cpp FMSTModel.h Individual.h RankingModel.h Population.h Tools.h
+	$(CC) -c FMSTModel.cpp
 
 MSTModel.o: MSTModel.cpp MSTModel.h Individual.h RankingModel.h Population.h Tools.h
 	$(CC) -c MSTModel.cpp

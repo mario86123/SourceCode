@@ -6,6 +6,10 @@
  *  Copyright 2011 University of the Basque Country. All rights reserved.
  *
  */
+
+#ifndef TOOLS_H
+#define TOOLS_H
+
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
@@ -161,3 +165,15 @@ void PrintMRMatrix(double ***matrix, int ell);
 void PrintMSTEdgeMatrix(double ***matrix, int ell);
 void buildModel(int **pop, int pop_size, double **ehm, int ell);
 void buildNHM(int **pop, int pop_size, double **ehm, int ell);
+
+
+struct element {
+    int parent;
+    int rank;
+};
+
+int find_set(int x, element * arr);
+void link(int x, int y, element * arr);
+void union_set(int x, int y, element * arr);
+
+#endif

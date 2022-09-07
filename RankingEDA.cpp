@@ -15,6 +15,7 @@
 #include "BWModel.h"
 #include "MRModel.h"
 #include "AMRModel.h"
+#include "FMSTModel.h"
 #include "MSTModel.h"
 #include "MSTME.h"
 #include "EHBSAWO.h"
@@ -100,11 +101,15 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     {
         m_model=new CAMRModel(m_problem_size, m_sel_size, b_ratio, previous_sampled_reference_count, seed);
     }
-    else if (((string)model_type)=="MST") // Accumulate MR Model
+    else if (((string)model_type)=="FMST") // fast MST Model
+    {
+        m_model=new CFMSTModel(m_problem_size, m_sel_size, b_ratio);
+    }
+    else if (((string)model_type)=="MST") // MST Model
     {
         m_model=new CMSTModel(m_problem_size, m_sel_size, b_ratio);
     }
-    else if (((string)model_type)=="MSTME") // Accumulate MR Model
+    else if (((string)model_type)=="MSTME") // MST Model with multiople edges
     {
         m_model=new CMSTME(m_problem_size, m_sel_size, b_ratio);
     }
@@ -163,8 +168,18 @@ int RankingEDA::Run(){
     // while ( m_evaluations<m_max_evaluations && !(m_population->Same(m_pop_size)) ){
     // while (m_evaluations<m_max_evaluations && population_avg_fitness < m_problem_size) {
     while (m_evaluations<m_max_evaluations) {        
+        
+        // time_t start, end;
+        // start = clock();
+
         //learn model
         m_model->Learn(m_population, m_sel_size); // m_sel_size == m_pop_size
+
+        // end = clock();
+        // cout << "learn model time: " << start - end << endl;
+
+
+
 
         // printf("1: \n");
         // m_population->Print();
@@ -249,13 +264,21 @@ int RankingEDA::Run(){
         }
 
         else {
-            // time_t s, e;
-            // s = clock();
 
+            // time_t start, end;
+            // start = clock();
+                
             for (i=0;i< m_offspring_size && m_evaluations<m_max_evaluations;i++){
                 
+                // time_t start, end;
+                // start = clock();
+
                 m_model->Sample(genes);
                 
+                // end = clock();
+                // cout << "sample one chromosome time: " << start - end << endl;
+
+
                 if (m_inverse)
                     m_population->AddToPopulation(genes, i, m_problem->EvaluateInv(genes));
                 else
@@ -263,12 +286,13 @@ int RankingEDA::Run(){
                 m_evaluations++;
             }
             //update the model.
+
+            // end = clock();
+            // cout << "sample chromosome time: " << start - end << endl;
             
             // sort population and offspring together (elitism)
             m_population->SortPopulation(1);
             
-            // e = clock();
-            // cout << "sample time: " << s - e << endl << endl;
 
         }
 

@@ -55,10 +55,13 @@ def read_avg_NFE(problem, model, pop_size):
     return summation / 10; 
 
 
+problem_instance_lst = ["A-n60-k9"]
+ell_lst = [ 67]
+opt_lst = [-1419] # according to EHBSA paper
 
-problem_instance_lst = ["A-n32-k5", "A-n45-k6", "A-n60-k9"]
-ell_lst = [35, 49, 67]
-opt_lst = [-761, -957, -1419] # according to EHBSA paper
+# problem_instance_lst = ["A-n32-k5", "A-n45-k6", "A-n60-k9"]
+# ell_lst = [35, 49, 67]
+# opt_lst = [-761, -957, -1419] # according to EHBSA paper
 # opt_lst = [-765, -965] # according to EHBSA paper
 
 
@@ -66,7 +69,7 @@ opt_lst = [-761, -957, -1419] # according to EHBSA paper
 
 
 
-pop_size_lst = [5, 10, 20, 40]
+pop_size_lst = [1, 3, 5, 10, 20, 40]
 # pop_size_lst = [1, 3, 5, 10, 20, 40]
 # other_pop_size_lst = [5, 10, 20]
 
@@ -96,7 +99,10 @@ for ell_count in range(len(problem_instance_lst)):
               or pop_size_lst[pop_size_count] == 10 \
               or pop_size_lst[pop_size_count] == 20 )) or \
                 (model_lst[model_count] == "MST" \
-            and (pop_size_lst[pop_size_count] == 10 \
+            and (pop_size_lst[pop_size_count] == 1 \
+              or pop_size_lst[pop_size_count] == 3 \
+              or pop_size_lst[pop_size_count] == 5 \
+              or pop_size_lst[pop_size_count] == 10 \
               or pop_size_lst[pop_size_count] == 20 \
               or pop_size_lst[pop_size_count] == 40 \
               or pop_size_lst[pop_size_count] == 80 \
@@ -120,7 +126,9 @@ for ell_count in range(len(problem_instance_lst)):
               or pop_size_lst[pop_size_count] == 10 \
               or pop_size_lst[pop_size_count] == 20)) or \
                 (model_lst[model_count] == "ET5" \
-            and (pop_size_lst[pop_size_count] == 5  \
+            and (pop_size_lst[pop_size_count] == 1 \
+              or pop_size_lst[pop_size_count] == 3 \
+              or pop_size_lst[pop_size_count] == 5 \
               or pop_size_lst[pop_size_count] == 10 \
               or pop_size_lst[pop_size_count] == 20)) or \
                 (model_lst[model_count] == "NO" \

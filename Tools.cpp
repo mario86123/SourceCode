@@ -863,3 +863,31 @@ void buildNHM(int **pop, int pop_size, double **nhm, int ell) {
         }
     }
 }
+
+
+// -- union find functions part -- //
+int find_set(int x, element * arr) {
+    
+    if (x != arr[x].parent) {
+        arr[x].parent = find_set(arr[x].parent, arr);
+    }
+    return arr[x].parent;
+}
+
+void link(int x, int y, element * arr) {
+    if (arr[x].rank > arr[y].rank) {
+        arr[y].parent = x;
+    }
+    else {
+        arr[x].parent = y;
+        if (arr[x].rank == arr[y].rank) {
+            arr[y].rank += 1;
+        }
+    }
+}
+
+void union_set(int x, int y, element * arr) {
+    link(find_set(x, arr), find_set(y, arr), arr);
+}
+
+// -- union find functions part end -- //
