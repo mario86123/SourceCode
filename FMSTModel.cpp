@@ -19,6 +19,8 @@ struct edge {
     int node_b;
     double length;
     int already_sampled_node_count;
+
+    int max_ele;
 };
 
 // edge * m_mst_edge_arr;
@@ -278,12 +280,12 @@ bool CFMSTModel::Learn(CPopulation * population, int size)
     // --- sort mst_node
     sort( mst_node_list.begin(),mst_node_list.end(), [&](node i,node j) { return i.length < j.length; } );
 
-    // cout << "mst_node_entropy:" << endl;
-    // int k = 0;
-    // for (node nnn: mst_node_list) {
-    //     k++;
-    //     cout << k << "th node num: " << nnn.node_num << ",  normalized entopy: " << nnn.length << endl;
-    // }
+    cout << "mst_node_entropy:" << endl;
+    int k = 0;
+    for (node nnn: mst_node_list) {
+        k++;
+        cout << k << "th node num: " << nnn.node_num << ",  normalized entopy: " << nnn.length << endl;
+    }
 
     // for (edge i: all_edge) {
     //     cout << i.node_a << ' ' << i.node_b << endl;
@@ -301,9 +303,25 @@ bool CFMSTModel::Learn(CPopulation * population, int size)
     for (int ref_node_num = 0; ref_node_num < m_problem_size; ++ref_node_num) {
         for (int other_node_num = ref_node_num + 1; other_node_num < m_problem_size; ++other_node_num) {
             
+
+            double max_element = 0;
+            int max_element_distance = 0;
+
+            for (int distance = 1; distance < m_problem_size; ++distance) {
+
+                if (m_edge_matrix[ref_node_num][other_node_num][distance] > max_element) {
+                    max_element = m_edge_matrix[ref_node_num][other_node_num][distance];
+                    max_element_distance = distance;
+                }
+
+            }
+            
+
             all_edge[count].node_a = ref_node_num;
             all_edge[count].node_b = other_node_num;
             all_edge[count].length = edge_entropy_arr[ref_node_num][other_node_num];
+
+            all_edge[count].max_ele = max_element_distance;
 
             count ++;
         }
@@ -353,12 +371,13 @@ bool CFMSTModel::Learn(CPopulation * population, int size)
     // ----- finish building MST ----- //
     // ----- MST information is in ""mst_edge_list"" ----- //
 
-    // cout << "mst_edge_entropy:" << endl;
-    // k = 0;
-    // for (edge eee: mst_edge_list) {
-    //     k++;
-    //     cout << k << "th edge num: " << eee.node_a << ", " << eee.node_b <<  ",  normalized entopy: " << eee.length << endl;
-    // }
+    cout << "mst_edge_entropy:" << endl;
+    k = 0;
+    for (edge eee: mst_edge_list) {
+        k++;
+        cout << k << "th edge num: " << eee.node_a << ", " << eee.node_b <<  ",  max element: " << eee.max_ele <<  ",  normalized entopy: " << eee.length << endl;
+    }
+    cout << endl;
 
 
 
@@ -409,6 +428,7 @@ bool CFMSTModel::Learn(CPopulation * population, int size)
                     count ++;
                 }
 
+                // already discover two edge in list (speed up)
                 if (count >= 2) break;
             }
             // cout << "mst_edge_entropy:" << endl;
@@ -427,31 +447,39 @@ bool CFMSTModel::Learn(CPopulation * population, int size)
         // find edge min entropy and eligible (exactly one node is sampled) element
             double min_edge_length = 100.0;
 
-            int count = 0;
+            // int count = 0;
             bool has_available_edge = false;
 
-            for (edge & e: mst_edge_list) {
-                // cout << "e.node_a: " << e.node_a << ", e.node_b: " << e.node_b << endl;
+            // for (edge & e: mst_edge_list) {
+            for (vector<edge>::iterator eit = mst_edge_list.begin(); eit != mst_edge_list.end();) {
+                cout << "eit->node_a: " << eit->node_a << ", eit->node_b: " << eit->node_b << ", eit->count: " << eit->already_sampled_node_count << endl;
                 // cout << "count: " << count << ", e.already_sampled_node_count: " << e.already_sampled_node_count << endl;
                 
                 // 3: two node are both sampled
-                if (e.already_sampled_node_count >= 3) {
+                if (eit->already_sampled_node_count >= 3) {
                     // cannot use count to remove vector element
                     // because of multiple already_sampled_node_count == 3
-                    mst_edge_list.erase(mst_edge_list.begin() + count);
-                    continue;
+                    cout << "erased edge: " << endl;
+                    cout << "eit->node_a: " << eit->node_a << ", eit->node_b: " << eit->node_b << ", eit->count: " << eit->already_sampled_node_count << endl<< endl;
+
+                    mst_edge_list.erase(eit);
+                    // cout << "original continue\n";
+                    // continue;
                 } 
 
                 // 1: node_a is sampled, 2: node_b is sampled
-                else if (e.already_sampled_node_count == 1 || e.already_sampled_node_count == 2) {
+                else if (eit->already_sampled_node_count == 1 || eit->already_sampled_node_count == 2) {
                     
                     has_available_edge = true;
                     
                     // ========== pick ""node"" ========== /
 
                     // if entropy(edge_min) > entropy(node_min), pick ""node""
-                    if (e.length > mst_node_list.front().length) {
-                        // cout << "pick node !! "<< endl;
+                    if (eit->length > mst_node_list.front().length) {
+                        cout << "pick node !! "<< endl;
+                        cout << "eit->node_a: " << eit->node_a<< ", eit->node_b: " << eit->node_b << endl;
+                        cout << "eit->length: "<< eit->length << ", mst_node_list.front().length: " << mst_node_list.front().length << endl;
+                        cout << "mst_node_list.front().node_num: " << mst_node_list.front().node_num << endl << endl;
                         m_sample_order[already_sampled_gene_count] = mst_node_list.front().node_num;
                         mst_node_list.erase (mst_node_list.begin());
 
@@ -466,32 +494,35 @@ bool CFMSTModel::Learn(CPopulation * population, int size)
 
                     // else if entropy(edge_min) < entropy(node_min), pick ""edge""
                     else {
-                        // cout << "pick edge !! "<< endl;
+                        cout << "pick edge !! "<< endl;
+                        cout << "eit->node_a: " << eit->node_a<< ", eit->node_b: " << eit->node_b << endl;
+                        cout << "eit->length: "<< eit->length << ", mst_node_list.front().length: " << mst_node_list.front().length << endl << endl;
+
 
                         // check which node is already sampled, which is not sampled yet
                             // sample order: 
                             // not_sampled_yet_node_num * problem_size + already_sampled_node_num + problem size
                         
                     // node_a is already sampled
-                        if (e.already_sampled_node_count == 1) { 
-                            m_sample_order[already_sampled_gene_count] = e.node_b * m_problem_size + e.node_a + m_problem_size;
+                        if (eit->already_sampled_node_count == 1) { 
+                            m_sample_order[already_sampled_gene_count] = eit->node_b * m_problem_size + eit->node_a + m_problem_size;
 
 
                             // delete "node and edge" from m_mst_node_arr and m_mst_edge_arr (node --> list ??)
-                            del_e_from_list(mst_edge_list, e.node_b);
-                            del_n_from_list(mst_node_list, e.node_b);
+                            del_e_from_list(mst_edge_list, eit->node_b); // node_a is already sampled
+                            del_n_from_list(mst_node_list, eit->node_b); // node_a is already sampled
                             
                         }
                     // end of node_a is already sampled
                         
                     // node_b is already sampled
                         else {
-                            // cout << "node a: " << e.node_a << ", node b: " << e.node_b << endl;
-                            m_sample_order[already_sampled_gene_count] = e.node_a * m_problem_size + e.node_b + m_problem_size;
+                            // cout << "node a: " << eit->node_a << ", node b: " << eit->node_b << endl;
+                            m_sample_order[already_sampled_gene_count] = eit->node_a * m_problem_size + eit->node_b + m_problem_size;
 
                             // delete "node and edge" from m_mst_node_arr and m_mst_edge_arr (node --> list ??)
-                            del_e_from_list(mst_edge_list, e.node_a);
-                            del_n_from_list(mst_node_list, e.node_a);
+                            del_e_from_list(mst_edge_list, eit->node_a); // node_b is already sampled
+                            del_n_from_list(mst_node_list, eit->node_a); // node_b is already sampled
                         }
                     // end of node_b is already sampled
                     }
@@ -500,9 +531,96 @@ bool CFMSTModel::Learn(CPopulation * population, int size)
                     break;                
                 }
                 // end of if 1: node_a is sampled, 2: node_b is sampled
-                count ++;
+                
+                else {
+                    ++eit;
+                }
             }
             // end of iterate over mst_sdge_list
+
+            // for (edge & e: mst_edge_list) {
+            //     cout << "eit->node_a: " << e.node_a << ", e.node_b: " << e.node_b << ", e.count: " << e.already_sampled_node_count << endl;
+            //     // cout << "count: " << count << ", e.already_sampled_node_count: " << e.already_sampled_node_count << endl;
+                
+            //     // 3: two node are both sampled
+            //     if (e.already_sampled_node_count >= 3) {
+            //         // cannot use count to remove vector element
+            //         // because of multiple already_sampled_node_count == 3
+            //         cout << "erased edge: " << endl;
+            //         cout << "e.node_a: " << (mst_edge_list.begin() + count)->node_a << ", e.node_b: " << (mst_edge_list.begin() + count)->node_b << ", e.count: " << (mst_edge_list.begin() + count)->already_sampled_node_count << endl<< endl;
+
+            //         mst_edge_list.erase(mst_edge_list.begin() + count);
+            //         cout << "original continue\n";
+            //         // continue;
+            //     } 
+
+            //     // 1: node_a is sampled, 2: node_b is sampled
+            //     else if (e.already_sampled_node_count == 1 || e.already_sampled_node_count == 2) {
+                    
+            //         has_available_edge = true;
+                    
+            //         // ========== pick ""node"" ========== /
+
+            //         // if entropy(edge_min) > entropy(node_min), pick ""node""
+            //         if (e.length > mst_node_list.front().length) {
+            //             cout << "pick node !! "<< endl;
+            //             cout << "e.node_a: " << e.node_a<< ", e.node_b: " << e.node_b << endl;
+            //             cout << "e.length: "<< e.length << ", mst_node_list.front().length: " << mst_node_list.front().length << endl;
+            //             cout << "mst_node_list.front().node_num: " << mst_node_list.front().node_num << endl << endl;
+            //             m_sample_order[already_sampled_gene_count] = mst_node_list.front().node_num;
+            //             mst_node_list.erase (mst_node_list.begin());
+
+
+            //             // delete edge from m_mst_edge_arr if necessary (all two nodes are sampled) (for loop) edge --> list ??
+            //             del_e_from_list(mst_edge_list, m_sample_order[already_sampled_gene_count]);
+            //             // end of for loop of delete edge
+
+            //         }
+                    
+            //         // ========== pick ""edge"" ========== /
+
+            //         // else if entropy(edge_min) < entropy(node_min), pick ""edge""
+            //         else {
+            //             cout << "pick edge !! "<< endl;
+            //             cout << "e.node_a: " << e.node_a<< ", e.node_b: " << e.node_b << endl;
+            //             cout << "e.length: "<< e.length << ", mst_node_list.front().length: " << mst_node_list.front().length << endl << endl;
+
+
+            //             // check which node is already sampled, which is not sampled yet
+            //                 // sample order: 
+            //                 // not_sampled_yet_node_num * problem_size + already_sampled_node_num + problem size
+                        
+            //         // node_a is already sampled
+            //             if (e.already_sampled_node_count == 1) { 
+            //                 m_sample_order[already_sampled_gene_count] = e.node_b * m_problem_size + e.node_a + m_problem_size;
+
+
+            //                 // delete "node and edge" from m_mst_node_arr and m_mst_edge_arr (node --> list ??)
+            //                 del_e_from_list(mst_edge_list, e.node_b); // node_a is already sampled
+            //                 del_n_from_list(mst_node_list, e.node_b); // node_a is already sampled
+                            
+            //             }
+            //         // end of node_a is already sampled
+                        
+            //         // node_b is already sampled
+            //             else {
+            //                 // cout << "node a: " << e.node_a << ", node b: " << e.node_b << endl;
+            //                 m_sample_order[already_sampled_gene_count] = e.node_a * m_problem_size + e.node_b + m_problem_size;
+
+            //                 // delete "node and edge" from m_mst_node_arr and m_mst_edge_arr (node --> list ??)
+            //                 del_e_from_list(mst_edge_list, e.node_a); // node_b is already sampled
+            //                 del_n_from_list(mst_node_list, e.node_a); // node_b is already sampled
+            //             }
+            //         // end of node_b is already sampled
+            //         }
+                    
+            //         // ========== end of pick ""edge"" ========== /
+            //         break;                
+            //     }
+            //     // end of if 1: node_a is sampled, 2: node_b is sampled
+            //     count ++;
+            // }
+            // // end of iterate over mst_sdge_list
             // cout << "has_available_edge: " << has_available_edge << endl;
             
             if (has_available_edge == false) {
@@ -524,10 +642,16 @@ bool CFMSTModel::Learn(CPopulation * population, int size)
     }
     // end of while loop
 
-    // for (int i = 0; i < m_problem_size; i ++) {
-    //     cout << m_sample_order[i] << " ";
-    // }
-    // cout << endl;
+    cout << "sample order: " << endl;
+    for (int i = 0; i < m_problem_size; i ++) {
+        if (m_sample_order[i] < m_problem_size) {
+            cout << "node: " << m_sample_order[i] << endl;
+        }
+        else {
+            cout << "edge: " << (m_sample_order[i] - m_problem_size) / m_problem_size << " " << (m_sample_order[i] - m_problem_size) % m_problem_size << endl;
+        }
+    }
+    cout << endl;
     
     
     // --- MST finished --- //
