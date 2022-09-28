@@ -865,6 +865,17 @@ void buildNHM(int **pop, int pop_size, double **nhm, int ell) {
 }
 
 
+double sum_arr(double *arr, int ell) {
+    
+    double sum = 0;
+    for (int i = 0; i < ell; i++) {
+        sum += arr[i];
+    }
+    return sum;
+}
+
+
+
 // -- union find functions part -- //
 int find_set(int x, element * arr) {
     

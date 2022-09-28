@@ -16,6 +16,7 @@
 #include "MRModel.h"
 #include "AMRModel.h"
 #include "FMSTModel.h"
+#include "LLMST.h"
 #include "MSTModel.h"
 #include "MSTME.h"
 #include "EHBSAWO.h"
@@ -100,6 +101,10 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     else if (((string)model_type)=="AMR") // Accumulate MR Model
     {
         m_model=new CAMRModel(m_problem_size, m_sel_size, b_ratio, previous_sampled_reference_count, seed);
+    }
+    else if (((string)model_type)=="LLMST") // Loss Less MST Model
+    {
+        m_model=new CLLMST(m_problem_size, m_sel_size, b_ratio);
     }
     else if (((string)model_type)=="FMST") // fast MST Model
     {

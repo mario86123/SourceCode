@@ -165,7 +165,7 @@ void PrintMRMatrix(double ***matrix, int ell);
 void PrintMSTEdgeMatrix(double ***matrix, int ell);
 void buildModel(int **pop, int pop_size, double **ehm, int ell);
 void buildNHM(int **pop, int pop_size, double **ehm, int ell);
-
+double sum_arr(double *arr, int ell);
 
 struct element {
     int parent;

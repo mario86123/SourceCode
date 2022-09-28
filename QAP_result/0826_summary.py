@@ -62,18 +62,18 @@ opt_lst = [-21043560, -1185996137] # according to EHBSA paper
 
 
 
-pop_size_lst = [3, 5, 10, 50, 100, 300, 500, 1000, 2000]
+pop_size_lst = [3, 5, 10, 50, 100, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000]
 # pop_size_lst = [1, 3, 5, 10, 20, 40, 80, 160]
 # other_pop_size_lst = [5, 10, 20]
 
-model_lst = ["MST", "GMC", "ET5", "NO",]
+model_lst = ["MST", "GMC", "ET5", "NO", "FMST",]
 # model_lst = ["MST", "GMC", "MU", "ET5", "NO",]
 
 
 print()
 print(" [[[ ARPD lower, better ]]] ")
 print()
-print("            |  MST  |  GMC  |  ET5  |   NO  |")
+print("             |  MST  |  GMC  |  ET5  |   NO  | FMST  |")
 # print("            |  MST  |  GMC  |  ET5  |   NO  |")
 # print("              |  MR  | MST | MSTME|  GMC |  MU  |  ET5 |")
 
@@ -115,7 +115,15 @@ for ell_count in range(len(problem_instance_lst)):
               or pop_size_lst[pop_size_count] == 300 \
               or pop_size_lst[pop_size_count] == 500 \
               or pop_size_lst[pop_size_count] == 1000 \
-              or pop_size_lst[pop_size_count] == 2000)):
+              or pop_size_lst[pop_size_count] == 2000)) or \
+                (model_lst[model_count] == "FMST" \
+            and (pop_size_lst[pop_size_count] == 1000 \
+              or pop_size_lst[pop_size_count] == 2000 \
+              or pop_size_lst[pop_size_count] == 4000 \
+              or pop_size_lst[pop_size_count] == 8000 \
+              or pop_size_lst[pop_size_count] == 16000 \
+              or pop_size_lst[pop_size_count] == 32000 \
+              or pop_size_lst[pop_size_count] == 64000)):
               
                 print(f'{read_arpd(problem_instance_lst[ell_count] , model_lst[model_count], pop_size_lst[pop_size_count], opt_lst[ell_count]):5.1f} |', end=" ")
             
