@@ -309,9 +309,10 @@ void CMSTModel::Sample(int * genes)
 
 
                 // if that entropy smaller than node_min_entropy, update information
-                if (node_min_entropy > tmp_entropy) {
+                if (node_min_entropy - tmp_entropy > 0.001) {
                     node_min_entropy = tmp_entropy;
                     min_entropy_node_num = node_num;
+                    // cout << "min_entropy_node_num: " << min_entropy_node_num << endl;
 
                     for(int idx = 0; idx < m_problem_size; ++idx) {
                         min_entropy_node_arr[idx] = tmp_entropy_node_arr[idx];
@@ -403,7 +404,7 @@ void CMSTModel::Sample(int * genes)
 
 
                 // == if tmp entropy smaller than edge_min_entropy, update information
-                if (edge_min_entropy > tmp_entropy) {
+                if (edge_min_entropy - tmp_entropy > 0.001) {
                     edge_min_entropy = tmp_entropy;
                     min_entropy_edge_num = need_to_sampled_node;
 
@@ -421,12 +422,20 @@ void CMSTModel::Sample(int * genes)
 
 
         int sampled_idx = -1;
+        // cout << "node_min_entropy: " << node_min_entropy << ", edge_min_entropy: " << edge_min_entropy << endl;
+        // cout << "node_min_entropy - edge_min_entropy: " << (node_min_entropy - edge_min_entropy) << endl;
+
         // --- min (node_min_entropy, edge_min_entropy) --- //
-        if (node_min_entropy < edge_min_entropy) {
+        // if (node_min_entropy < edge_min_entropy) {
+        if (node_min_entropy - edge_min_entropy < 0.001) { // use node arr to sample
+            // cout << "node_min_entropy: " << node_min_entropy <<endl;
+            // PrintArray(min_entropy_node_arr, m_problem_size);
             sampled_idx = sample_from_array(min_entropy_node_arr, m_problem_size);
             genes[sampled_idx] = min_entropy_node_num;
         }
         else {
+            // cout << "edge_min_entropy: " << edge_min_entropy <<endl;
+            // PrintArray(min_entropy_edge_arr, m_problem_size);
             sampled_idx = sample_from_array(min_entropy_edge_arr, m_problem_size);
             genes[sampled_idx] = min_entropy_edge_num;
             // if (sampled_idx == -1) {
@@ -439,7 +448,7 @@ void CMSTModel::Sample(int * genes)
 
 
         // cout << "genes[" << sampled_idx << "]: "<< genes[sampled_idx] << endl;
-
+        // cout << endl;
 
         // set sampled node and idx to already sampled (already_sampled_idx and already_sampled_node)
         already_sampled_idx[sample_count] = sampled_idx;

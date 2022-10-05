@@ -282,6 +282,7 @@ int RankingEDA::Run(){
                 
                 // end = clock();
                 // cout << "sample one chromosome time: " << start - end << endl;
+                // cout << "\n\n";
 
 
                 if (m_inverse)
@@ -293,7 +294,7 @@ int RankingEDA::Run(){
             //update the model.
 
             // end = clock();
-            // cout << "sample chromosome time: " << start - end << endl;
+            // cout << "sample all chromosomes time: " << start - end << endl;
             
             // sort population and offspring together (elitism)
             m_population->SortPopulation(1);

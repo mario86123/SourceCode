@@ -747,7 +747,7 @@ void PrintMatrix(double** matrix_ptr, int size) {
         for(int j = 0; j < size; ++j){
             printf("%5.1lf", matrix_ptr[i][j]);
         }
-        // printf("   => entropy: %3lf", calculate_entropy(matrix_ptr[i], size));
+        printf("   => entropy: %3lf", calculate_entropy(matrix_ptr[i], size));
         printf("\n");
     }
 }
