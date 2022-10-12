@@ -151,6 +151,7 @@ void Swap(int * array, int i, int j);
 
 double calculate_entropy(int *arr, int arr_size);
 double calculate_entropy(double *arr, int arr_size);
+double calculate_entropy_with_known_sum(double *arr, int arr_size, double sum);
 int sample_from_array(int *arr, int ell);
 int sample_from_array(double *arr, int ell);
 int sample_from_array_pow(double *arr, int ell, double power);

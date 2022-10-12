@@ -579,6 +579,26 @@ double calculate_entropy(double *arr, int arr_size) {
     return -entropy;
 }
 
+// floating point array with known summation
+double calculate_entropy_with_known_sum(double *arr, int arr_size, double sum) {
+    
+    // double sum = 0;
+    // for (int i = 0; i < arr_size; i ++) {
+    //     sum += arr[i];
+    // }
+
+    double entropy = 0;
+    for (int i = 0; i < arr_size; i ++) {
+        
+        if (arr[i] != 0) {
+            double p = arr[i] / sum;
+            entropy += p * log(p); // nature log
+        }
+    }
+
+    return -entropy;
+}
+
 // sample from integer array
 int sample_from_array(int *arr, int ell) {
     

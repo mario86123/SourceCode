@@ -18,10 +18,16 @@ using std::endl;
 
 double update_entropy(double original_entropy, double deleted_element, double summation) {
 
+    // original_entropy = original_entropy * (-1);
+    // double new_sum = summation - deleted_element;
+    // double deleted_element_entropy =  (deleted_element / summation) * log(deleted_element / summation);
+    // return (-1) * (summation / new_sum) * (  original_entropy - deleted_element_entropy + (new_sum / summation) * log(summation / new_sum));
+
     original_entropy = original_entropy * (-1);
     double new_sum = summation - deleted_element;
     double deleted_element_entropy =  (deleted_element / summation) * log(deleted_element / summation);
     return (-1) * (summation / new_sum) * (  original_entropy - deleted_element_entropy + (new_sum / summation) * log(summation / new_sum));
+
 }
 
 /*
@@ -117,13 +123,6 @@ CLLMST::~CLLMST()
  */
 bool CLLMST::Learn(CPopulation * population, int size)
 {   
-
-
-    time_t start, end;
-    start = clock();
-
-    end = clock();
-    cout << "learn model time: " << start - end << endl;
 
     // clean matrix
     // m_edge_matrix[i][j][1] = node i is before node j for 1 position
@@ -266,7 +265,7 @@ bool CLLMST::Learn(CPopulation * population, int size)
 
     // calculate edge entropy ratio
     for (int i = 0; i < m_problem_size - 1; ++i) {
-        m_mst_edge_arr[i].entropy = calculate_entropy(m_edge_matrix[m_mst_edge_arr[i].node_a][m_mst_edge_arr[i].node_b], m_problem_size);
+        m_mst_edge_arr[i].entropy = 0;
         m_mst_edge_arr[i].sum = sum_arr(m_edge_matrix[m_mst_edge_arr[i].node_a][m_mst_edge_arr[i].node_b], m_problem_size);
 
     }
@@ -274,8 +273,8 @@ bool CLLMST::Learn(CPopulation * population, int size)
     // calculate node entropy ratio
     for (int i = 0; i < m_problem_size; ++i) {
         m_mst_node_arr[i].node_num = i;
-        m_mst_node_arr[i].entropy = calculate_entropy(m_node_matrix[i], m_problem_size);
         m_mst_node_arr[i].sum = sum_arr(m_node_matrix[i], m_problem_size);
+        m_mst_node_arr[i].entropy = calculate_entropy_with_known_sum(m_node_matrix[i], m_problem_size, m_mst_node_arr[i].sum);
     }
 
     return true;
@@ -294,11 +293,6 @@ bool CLLMST::Learn(CPopulation * population, int size)
 void CLLMST::Sample(int * genes)
 {
 
-    time_t start, end, loop_start, loop_end;
-    
-    time_t NC = 0, NS = 0, NU = 0, EC = 0, ES = 0, EU = 0, sample = 0;
-
-    start = clock();
 
     // --- m_mst_node_lst initialization --- //
     struct mst_node {
@@ -350,8 +344,6 @@ void CLLMST::Sample(int * genes)
     // ----- end of initialization ----- //
 
 
-    // already sampled index array
-    // int already_sampled_index_arr[m_problem_size]; // store aleady sampled index
     
     bool is_sampled_node[m_problem_size];
     bool is_sampled_index[m_problem_size];
@@ -361,15 +353,9 @@ void CLLMST::Sample(int * genes)
         is_sampled_index[i] = false;
     }
 
-    end = clock();
-    cout << "initialization time: " << start - end << endl;
-
-
-    loop_start = clock();
     for (int sample_count = 0; sample_count < m_problem_size; sample_count++) {
 
 
-        start = clock();
 
         // [node] choose lowest entropy ratio array
         int min_entropy_node_num = -1;
@@ -380,15 +366,9 @@ void CLLMST::Sample(int * genes)
                 
                 min_entropy_node_num = i;
                 node_min_entropy = mst_node_lst[i].entropy;
-                // cout << "min_entropy_node_num: " << min_entropy_node_num << endl;
 
             }
         }
-
-        end = clock();
-        NC += start - end;
-        // cout << "[node] choose lowest entropy ratio array time: " << start - end << endl;
-        start = clock();
 
 
 
@@ -399,7 +379,6 @@ void CLLMST::Sample(int * genes)
         for (int i = 0; i < m_problem_size - 1; i ++) {
             // if (status == 1) or (status == 2)
             if (mst_edge_lst[i].status == 1 || mst_edge_lst[i].status == 2 ) {
-                // cout << i<< " th ee: "<< mst_edge_lst[i].entropy << ", a: " << mst_edge_lst[i].node_a<<", b: " << mst_edge_lst[i].node_b<< endl;
 
                 if (edge_min_entropy - mst_edge_lst[i].entropy > 0.001) {
                     min_entropy_edge_num = i;
@@ -407,13 +386,6 @@ void CLLMST::Sample(int * genes)
                 }
             }
         }
-
-        // cout << "[edge] choose lowest entropy ratio array time: " << start - end << endl;
-
-        end = clock();
-        EC += start - end;
-        start = clock();
-
 
         // normalize edge and node entropy
             // todo
@@ -424,13 +396,11 @@ void CLLMST::Sample(int * genes)
         double sample_arr[m_problem_size];
         int sample_node_num;
 
-        // cout << "node_min_entropy: " << node_min_entropy << ", edge_min_entropy: " << edge_min_entropy << endl;
-        // cout << "node_min_entropy - edge_min_entropy: " << (node_min_entropy - edge_min_entropy) << endl;
 
         // compare node and edge lowest entropy ratio
         // if (node_min_entropy < edge_min_entropy ) { // use node arr to sample
         if (node_min_entropy - edge_min_entropy < 0.001) { // use node arr to sample
-            // cout << "node_min_entropy: " << node_min_entropy <<endl;
+
             for (int i = 0; i < m_problem_size; i ++) {
                 if (is_sampled_index[i] == false) { // that index is not sampled yet
                     sample_arr[i] = m_node_matrix[min_entropy_node_num][i];
@@ -440,18 +410,11 @@ void CLLMST::Sample(int * genes)
                 }
             }
             sample_node_num = min_entropy_node_num;
-            
-            // cout << "use node arr to sample (assign sample arr): " << start - end << endl;
-
-            end = clock();
-            NS += start - end;            
-            start = clock();
 
 
         }
 
         else { // if (edge_min_entropy < node_min_entropy ) // use edge arr to sample
-            // cout << "edge_min_entropy: " << edge_min_entropy <<endl;
             int ref_node_num;
 
             // find what idex is occupied by already sampled node
@@ -483,13 +446,6 @@ void CLLMST::Sample(int * genes)
                     sample_arr[tmp_idx] = 0.0;
                 }
             }
-
-            // cout << "use edge arr to sample (assign sample arr): " << start - end << endl;
-
-
-            end = clock();
-            ES += start - end;
-            start = clock();
         }
 
 
@@ -499,19 +455,11 @@ void CLLMST::Sample(int * genes)
         int sample_idx = sample_from_array(sample_arr, m_problem_size);
 
 
-        end = clock();
-        sample += start - end;
-        // cout << "sample: " << start - end << endl;
-        start = clock();
-
-
 
 
         // ===== assign gene value   
         genes[sample_idx] = sample_node_num;
-        // cout << "genes[" << sample_idx <<"] = "<< sample_node_num << ", genes[" << sample_idx <<"] = "<< sample_node_num << ", genes[" << sample_idx <<"] = "<< sample_node_num << endl;
-        // cout << endl;
-            
+        
 
         // ===== update information
         // already_sampled_index_arr[m_problem_size]; // store aleady sampled index
@@ -538,11 +486,7 @@ void CLLMST::Sample(int * genes)
 
             }
         }
-
-        end = clock();
-        NU += start - end;
-        // cout << "update node entropy: " << start - end << endl;
-        start = clock();
+        
 
         // update all [edges] usabilty (status, entropy_ratio, sum, ... )
         for (int edge_num = 0; edge_num < m_problem_size - 1; edge_num ++) {
@@ -583,8 +527,8 @@ void CLLMST::Sample(int * genes)
                         }
 
 
-                        mst_edge_lst[edge_num].entropy = calculate_entropy(tmp_arr, m_problem_size);
                         mst_edge_lst[edge_num].element_sum = tmp_sum;
+                        mst_edge_lst[edge_num].entropy = calculate_entropy_with_known_sum(tmp_arr, m_problem_size, mst_edge_lst[edge_num].element_sum);
                         
                         // cout << "1 tmp_arr: ";
                         // PrintArray(tmp_arr, m_problem_size);
@@ -610,12 +554,9 @@ void CLLMST::Sample(int * genes)
                             }
                         }
 
-
-                        mst_edge_lst[edge_num].entropy = calculate_entropy(tmp_arr, m_problem_size);
                         mst_edge_lst[edge_num].element_sum = tmp_sum;
-                        // cout << "2 tmp_arr: ";
-                        // PrintArray(tmp_arr, m_problem_size);
-                        // cout << "entropy: " << mst_edge_lst[edge_num].entropy << endl << endl;
+                        mst_edge_lst[edge_num].entropy = calculate_entropy_with_known_sum(tmp_arr, m_problem_size, mst_edge_lst[edge_num].element_sum);
+                        
                     }
                     mst_edge_lst[edge_num].ref_node_idx = sample_idx;
                 }
@@ -638,18 +579,10 @@ void CLLMST::Sample(int * genes)
                     tmp_idx += m_problem_size;
                 }
 
-                // cout << "ref_node: "<<  mst_edge_lst[edge_num].node_a << endl;
-                // cout << "tmp_idx: "<< tmp_idx << endl;
-                // cout << "sample_idx: "<< sample_idx << endl;
-                // cout << "mst_edge_lst[edge_num].ref_node_idx: "<< mst_edge_lst[edge_num].ref_node_idx << endl;
-                // cout << "original_entropy: "<< mst_edge_lst[edge_num].entropy << endl;
 
                 double tmp_del_element = m_edge_matrix[mst_edge_lst[edge_num].node_a][mst_edge_lst[edge_num].node_b][tmp_idx];
                 mst_edge_lst[edge_num].entropy = update_entropy(mst_edge_lst[edge_num].entropy, tmp_del_element, mst_edge_lst[edge_num].element_sum);
                 mst_edge_lst[edge_num].element_sum -= tmp_del_element;
-                // cout << "update_entropy: "<< mst_edge_lst[edge_num].entropy << endl;
-                // cout << "tmp_del_element: "<< tmp_del_element << endl;
-                // cout  << endl;
 
 
             }
@@ -664,47 +597,13 @@ void CLLMST::Sample(int * genes)
                     tmp_idx += m_problem_size;
                 }
 
-                // cout << "ref_node: "<<  mst_edge_lst[edge_num].node_b << endl;
-                // cout << "tmp_idx: "<< tmp_idx << endl;
-                // cout << "sample_idx: "<< sample_idx << endl;
-                // cout << "mst_edge_lst[edge_num].ref_node_idx: "<< mst_edge_lst[edge_num].ref_node_idx << endl;
-                // cout << "original_entropy: "<< mst_edge_lst[edge_num].entropy << endl;
-
                 double tmp_del_element = m_edge_matrix[mst_edge_lst[edge_num].node_b][mst_edge_lst[edge_num].node_a][tmp_idx];
                 mst_edge_lst[edge_num].entropy = update_entropy(mst_edge_lst[edge_num].entropy, tmp_del_element, mst_edge_lst[edge_num].element_sum);
                 mst_edge_lst[edge_num].element_sum -= tmp_del_element;
-
-                // cout << "update_entropy: "<< mst_edge_lst[edge_num].entropy << endl;
-                // cout << "tmp_del_element: "<< tmp_del_element << endl;
-                // cout  << endl;
-
-
-
             }
         
         }
 
-        end = clock();
-        EU += start - end;
-        // cout << "update edge entropy: " << start - end << endl<< endl;
-
-
-        // cout << endl;
     }
-    loop_end = clock();
-
-
-    // time_t NC = 0, NS = 0, NU = 0, EC = 0, ES = 0, EU = 0, sample = 0;
-    cout << "NC: " << NC << endl;
-    cout << "EC: " << EC << endl;
-    cout << "ES: " << ES << endl;
-    cout << "NS: " << NS << endl;
-    cout << "NU: " << NU << endl;
-    cout << "EU: " << EU << endl;
-    cout << "sample: " << sample << endl;
-    cout << "loop time: " << loop_start - loop_end << endl;
-
-    cout << "loop_time - (NC + NS + NU + EC + ES + EU + sample): " << loop_start - loop_end - (NC + NS + NU + EC + ES + EU + sample) <<  endl << endl;
-
 
 }
