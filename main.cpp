@@ -385,7 +385,7 @@ int main(int argc, char * argv[])
     else{
         RankingEDA * alg= new RankingEDA(PROBLEM,PROBLEM_SIZE, POP_SIZE, MAX_EVALUATIONS, B_RATIO, CUT_POINT_COUNT, PREVIOUS_SAMPLED_REFERENCE_COUNT, MODEL_TYPE, METRIC_TYPE,INVERSE, SEED);
         //alg->MetricSuitability_Experiment(RESULTS_FILENAME);exit(1);
-        alg->Run();
+        alg->Run(PROBLEM_TYPE);
         
     
     

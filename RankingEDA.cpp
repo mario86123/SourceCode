@@ -50,6 +50,7 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     memcpy(m_model_type,model_type,sizeof(char)*10);
     
     m_inverse=inverse;
+    m_seed = seed;
     
     //2. initialize the population
     
@@ -154,7 +155,7 @@ RankingEDA::~RankingEDA()
 /*
  * Running function
  */
-int RankingEDA::Run(){
+int RankingEDA::Run(char* problem_type){
     
     //cout<<"Running..."<<endl;
     //variable initializations.
@@ -165,7 +166,23 @@ int RankingEDA::Run(){
     float rate=0.001;
     float population_avg_fitness = -100000000;
 
-    // double * pop_entropy_arr = new double[ m_problem_size * m_problem_size / m_pop_size * 1000];
+    ofstream best_fitness_file;
+    ofstream avg_fitness_file;
+
+    // file name: SDF_best_fitness/20_100_0.txt
+    string best_fitness_file_name = problem_type;
+    string avg_fitness_file_name = problem_type;
+
+
+    string tmp_model_type = m_model_type;
+
+
+    best_fitness_file_name += "_best_fitness/" + tmp_model_type + "/" + to_string(m_problem_size) + "_" + to_string(m_pop_size) + "_" + to_string(m_seed) + ".txt";
+    best_fitness_file.open(best_fitness_file_name);
+
+
+    avg_fitness_file_name += "_avg_fitness/" + tmp_model_type + "/" + to_string(m_problem_size) + "_" + to_string(m_pop_size) + "_" + to_string(m_seed) + ".txt";
+    avg_fitness_file.open(avg_fitness_file_name);
 
     //EDA iteration. Stopping criterion is the maximum number of evaluations performed
     //               or reach global optimal
@@ -183,15 +200,6 @@ int RankingEDA::Run(){
         // end = clock();
         // cout << "learn model time: " << start - end << endl;
 
-
-
-
-        // printf("1: \n");
-        // m_population->Print();
-
-        // double tmp_entropy = m_population->CalculatePopulationEntropy();
-        // printf("pop entropy: %lf\n", tmp_entropy);
-        // pop_entropy_arr[iterations] = tmp_entropy;
 
 
 
@@ -302,15 +310,21 @@ int RankingEDA::Run(){
 
         }
 
-        // printf("3: \n");
-        // m_population->RandomShuffle();
-        // m_population->Print();
-
 
         //update indicators
         newScore=m_population->m_individuals[0]->Value();
         population_avg_fitness = m_population->AverageFitnessPopulation(m_pop_size);
         // printf("iteration: %d\n", iterations);
+
+        
+        
+        // --- write file ---//
+
+        best_fitness_file << m_evaluations << " " << newScore << endl;
+        avg_fitness_file << m_evaluations << " " << population_avg_fitness << endl;
+
+        
+        // --- write file end ---//
 
 
         // *** if all individuals in the population are the same
@@ -361,24 +375,17 @@ int RankingEDA::Run(){
 
         iterations++;
 
-    }
-
-    // --- write file ---//
-    // ofstream output_file;
-    // output_file.open("pop_entropy.txt");
+    } // iteration loop end
 
 
-    // for (int i = 0; i < m_problem_size * m_problem_size / m_pop_size * 1000; ++i) {
-    //     output_file << pop_entropy_arr[i] << " ";
-    // }
-    // output_file << endl << endl;
+    best_fitness_file.close();
+    avg_fitness_file.close();
 
-    // output_file.close();
-    // --- write file end ---//
+
+
 
     delete [] genes;
-    // delete [] pop_entropy_arr;
-    
+
     return 0;
 }
 

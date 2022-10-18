@@ -94,6 +94,7 @@ public:
      * Evaluates the inverse of the samples solutions.
      */
     int m_inverse;
+    int m_seed;
     
     /*
      * The population
@@ -118,7 +119,7 @@ public:
     /*
      * Running function
      */
-	int Run();
+	int Run(char * problem_type);
     
     /*
      * Returns the number of performed evaluations.
