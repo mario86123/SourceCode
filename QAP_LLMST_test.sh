@@ -22,13 +22,13 @@ do
       do
       
           ./RankingEDAsCEC -i ./QAP_instance/tai100${Problem[$problem]}.dat.dat\
-                            -o ./QAP_result/LLMST"$((${NumOfEdge[$ell]}))"/"$problem"_"$((${PopulationSizeArray[$pop]} * ${ProblemSizeArray[$ell]}))"_LLMST"$((${NumOfEdge[$ell]}))"_"$times".txt\
+                            -o ./QAP_result/LLMST"$((${NumOfEdge[$NOE]}))"/100"${Problem[$problem]}"_"$((${PopulationSizeArray[$pop]} * ${ProblemSizeArray[$ell]}))"_LLMST"$((${NumOfEdge[$NOE]}))"_"$times".txt\
                             -s "$times"\
                             -t QAP\
                             -m LLMST -d C -v 0\
                             -p "$((${PopulationSizeArray[$pop]} * ${ProblemSizeArray[$ell]}))"\
                             -e "$((${ProblemSizeArray[$ell]} * ${ProblemSizeArray[$ell]} * 1000))"\
-                            -b 0.1 -n "$((${NumOfEdge[$ell]}))"&
+                            -b 0.1 -n "$((${NumOfEdge[$NOE]}))"&
       done
       # problem end
     done

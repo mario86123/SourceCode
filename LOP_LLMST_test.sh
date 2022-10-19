@@ -22,13 +22,13 @@ do
       do
         
           ./RankingEDAsCEC -i ./LOP_instance/Cebe.lop.n100."$problem"\
-                            -o ./LOP_result/LLMST"$((${NumOfEdge[$ell]}))"/"$problem"_"$((${PopulationSizeArray[$pop]} * ${ProblemSizeArray[$ell]}))"_LLMST"$((${NumOfEdge[$ell]}))"_"$times".txt\
+                            -o ./LOP_result/LLMST"$((${NumOfEdge[$NOE]}))"/"$problem"_"$((${PopulationSizeArray[$pop]} * 100))"_LLMST"$((${NumOfEdge[$NOE]}))"_"$times".txt\
                             -s "$times"\
                             -t LOP\
                             -m LLMST -d U -v 0\
                             -p "$((${PopulationSizeArray[$pop]} * ${ProblemSizeArray[$ell]}))"\
-                            -e "$((${ProblemSizeArray[$ell]} * ${ProblemSizeArray[$ell]} * 1000))"\
-                            -b 0.1 -n "$((${NumOfEdge[$ell]}))"&
+                            -e 10000000\
+                            -b 0.1 -n "$((${NumOfEdge[$NOE]}))"&
       done
       # repeat times end
     done
