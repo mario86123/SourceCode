@@ -255,7 +255,7 @@ bool CLLMST::Learn(CPopulation * population, int size)
             m_mst_edge_arr[mst_edge_count] = e;
             mst_edge_count ++;
 
-            if (mst_edge_count >= m_max_num_of_edge) break; // change here !!
+            if (mst_edge_count >= m_max_num_of_edge - 1) break; // change here !!
         }
     }
     // --- MST finished --- //
