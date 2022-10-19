@@ -66,14 +66,14 @@ pop_size_lst = [11, 33, 55, 110, 330, 550, 1100, 2200, 4400, 8800, 17600, 35200,
 # pop_size_lst = [1, 3, 5, 10, 20, 40, 80, 160]
 # other_pop_size_lst = [5, 10, 20]
 
-model_lst = ["MST", "GMC", "ET5", "NO", "FMST"]
+model_lst = ["MST", "GMC", "ET5", "NO"]
 # model_lst = ["MST", "GMC", "MU", "ET5", "NO",]
 
 
 print()
 print(" [[[ ARPD lower, better ]]] ")
 print()
-print("            |  MST  |  GMC  |  ET5  |   NO  |  FMST |")
+print("            |  MST  |  GMC  |  ET5  |   NO  |")
 # print("            |  MST  |  GMC  |  ET5  |   NO  |")
 # print("              |  MR  | MST | MSTME|  GMC |  MU  |  ET5 |")
 

@@ -33,11 +33,12 @@ double update_entropy(double original_entropy, double deleted_element, double su
 /*
  * Class constructor.
  */
-CLLMST::CLLMST(int problem_size, int sel_size, double b_ratio)
+CLLMST::CLLMST(int problem_size, int sel_size, double b_ratio, int number_of_edge)
 {
 	m_problem_size=problem_size;
     m_sample_size=sel_size;
     m_samples= new int*[m_sample_size];
+    m_max_num_of_edge = number_of_edge;
 
     
     m_edge_matrix = new double**[m_problem_size];
@@ -61,7 +62,7 @@ CLLMST::CLLMST(int problem_size, int sel_size, double b_ratio)
     // epsilon = b * ell / pop_size
     m_epsilon = double(m_problem_size * b_ratio) / (m_sample_size); // pop_size = sample_size
 
-    m_mst_edge_arr = new edge[m_problem_size - 1];
+    m_mst_edge_arr = new edge[m_max_num_of_edge - 1];
     m_mst_node_arr = new node[m_problem_size];
 
 
@@ -254,7 +255,7 @@ bool CLLMST::Learn(CPopulation * population, int size)
             m_mst_edge_arr[mst_edge_count] = e;
             mst_edge_count ++;
 
-            if (mst_edge_count >= m_problem_size - 1) break;
+            if (mst_edge_count >= m_max_num_of_edge) break; // change here !!
         }
     }
     // --- MST finished --- //
@@ -264,7 +265,7 @@ bool CLLMST::Learn(CPopulation * population, int size)
 
 
     // calculate edge entropy ratio
-    for (int i = 0; i < m_problem_size - 1; ++i) {
+    for (int i = 0; i < m_max_num_of_edge; ++i) {
         m_mst_edge_arr[i].entropy = 0;
         m_mst_edge_arr[i].sum = sum_arr(m_edge_matrix[m_mst_edge_arr[i].node_a][m_mst_edge_arr[i].node_b], m_problem_size);
 
@@ -329,8 +330,8 @@ void CLLMST::Sample(int * genes)
         int ref_node_idx;
     };
 
-    mst_edge mst_edge_lst[m_problem_size - 1];
-    for (int num = 0; num < m_problem_size - 1 ; num++) {
+    mst_edge mst_edge_lst[m_max_num_of_edge];
+    for (int num = 0; num < m_max_num_of_edge ; num++) {
         mst_edge_lst[num].node_a = m_mst_edge_arr[num].node_a;
         mst_edge_lst[num].node_b =  m_mst_edge_arr[num].node_b;
         mst_edge_lst[num].element_sum = m_mst_edge_arr[num].sum;
@@ -376,7 +377,7 @@ void CLLMST::Sample(int * genes)
         // [edge] choose lowest entropy ratio array (not all edges in mst can be compared)
         int min_entropy_edge_num = -1;
         double edge_min_entropy = 100;
-        for (int i = 0; i < m_problem_size - 1; i ++) {
+        for (int i = 0; i < m_max_num_of_edge; i ++) {
             // if (status == 1) or (status == 2)
             if (mst_edge_lst[i].status == 1 || mst_edge_lst[i].status == 2 ) {
 
@@ -489,7 +490,7 @@ void CLLMST::Sample(int * genes)
         
 
         // update all [edges] usabilty (status, entropy_ratio, sum, ... )
-        for (int edge_num = 0; edge_num < m_problem_size - 1; edge_num ++) {
+        for (int edge_num = 0; edge_num < m_max_num_of_edge; edge_num ++) {
 
             // (status 0 -> 0)
                 // do not need to do anything

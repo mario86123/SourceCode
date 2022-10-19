@@ -40,6 +40,7 @@ int POP_SIZE;
 
 double B_RATIO;
 double CUT_POINT_COUNT;
+int NUMBER_OF_EDGE;
 
 int PREVIOUS_SAMPLED_REFERENCE_COUNT;
 
@@ -200,7 +201,7 @@ bool GetParameters(int argc,char * argv[])
     }
 	char** optarg;
 	optarg = new char*[argc];
-    while ((c = GetOption (argc, argv, "s:h:t:o:i:m:d:v:p:e:b:c:r:",optarg)) != '\0')
+    while ((c = GetOption (argc, argv, "s:h:t:o:i:m:d:v:p:e:b:c:r:n:",optarg)) != '\0')
     {
     	switch (c)
     	{
@@ -256,6 +257,10 @@ bool GetParameters(int argc,char * argv[])
                 
            	case 'v':
                 INVERSE=atoi(*optarg);
+                break;
+            
+            case 'n':
+                NUMBER_OF_EDGE=atoi(*optarg);
                 break;
 		
         }
@@ -383,7 +388,7 @@ int main(int argc, char * argv[])
         exit(1);
     }
     else{
-        RankingEDA * alg= new RankingEDA(PROBLEM,PROBLEM_SIZE, POP_SIZE, MAX_EVALUATIONS, B_RATIO, CUT_POINT_COUNT, PREVIOUS_SAMPLED_REFERENCE_COUNT, MODEL_TYPE, METRIC_TYPE,INVERSE, SEED);
+        RankingEDA * alg= new RankingEDA(PROBLEM,PROBLEM_SIZE, POP_SIZE, MAX_EVALUATIONS, B_RATIO, CUT_POINT_COUNT, PREVIOUS_SAMPLED_REFERENCE_COUNT, NUMBER_OF_EDGE, MODEL_TYPE, METRIC_TYPE,INVERSE, SEED);
         //alg->MetricSuitability_Experiment(RESULTS_FILENAME);exit(1);
         alg->Run(PROBLEM_TYPE);
         
