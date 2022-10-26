@@ -2,7 +2,7 @@
 
 ProblemSizeArray=("100")
 PopulationSizeArray=("10" "20" "40")
-NumOfEdge=("100" "75" "50" "25")
+NumOfEdge=("99" "75" "50" "25")
 
 
 

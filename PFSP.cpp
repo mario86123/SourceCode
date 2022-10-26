@@ -102,8 +102,9 @@ double PFSP::Evaluate(int * genes)
 		}
 		
 		fitness+=m_timeTable[m_machines-1];
+		// cout << m_timeTable[m_machines-1] << " ";
 	}
-	
+	// cout << endl;
 	return -fitness;
 }
 
@@ -180,6 +181,7 @@ int PFSP::Read(string filename)
 			//save distance in distances matrix. Save negative distance in order to minimize fitness instead of
 			//maximize.
 	    	m_processingtimes[i][j]= atoi(sub.c_str());
+			// cout << m_processingtimes[i][j] << " ";
 	    	if (j==m_jobs-1)
 	    	{
 	    		i++;

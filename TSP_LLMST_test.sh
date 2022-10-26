@@ -3,7 +3,7 @@
 ProblemSizeArray=("76")
 Problem=("pr76")
 PopulationSizeArray=("20" "40" "80")
-NumOfEdge=("76" "57" "38" "19")
+NumOfEdge=("75" "57" "38" "19")
 
 
 # num of edge

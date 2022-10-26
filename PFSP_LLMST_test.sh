@@ -5,7 +5,7 @@ Problem=("100_5" "100_10" "100_20")
 # ProblemSizeArray=("60")
 # PopulationSizeArray=("2" "3" "5" "10" "20")
 PopulationSizeArray=("1" "3" "5")
-NumOfEdge=("100" "75" "50" "25")
+NumOfEdge=("99" "75" "50" "25")
 
 
 # Population Size

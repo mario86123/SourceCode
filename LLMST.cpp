@@ -255,7 +255,7 @@ bool CLLMST::Learn(CPopulation * population, int size)
             m_mst_edge_arr[mst_edge_count] = e;
             mst_edge_count ++;
 
-            if (mst_edge_count >= m_max_num_of_edge - 1) break; // change here !!
+            if (mst_edge_count >= m_max_num_of_edge) break; // change here !!
         }
     }
     // --- MST finished --- //
@@ -268,6 +268,9 @@ bool CLLMST::Learn(CPopulation * population, int size)
     for (int i = 0; i < m_max_num_of_edge; ++i) {
         m_mst_edge_arr[i].entropy = 0;
         m_mst_edge_arr[i].sum = sum_arr(m_edge_matrix[m_mst_edge_arr[i].node_a][m_mst_edge_arr[i].node_b], m_problem_size);
+        // cout <<i<<"'s sum: " <<  m_mst_edge_arr[i].sum  << endl;
+        // PrintArray(m_edge_matrix[m_mst_edge_arr[i].node_a][m_mst_edge_arr[i].node_b], m_problem_size);
+        // cout << m_mst_edge_arr[i].node_a << " " << m_mst_edge_arr[i].node_b << endl<<endl;
 
     }
 
@@ -454,7 +457,15 @@ void CLLMST::Sample(int * genes)
         // ===== sample from array           (  time complexity: O(n)  )
         // PrintArray(sample_arr, m_problem_size);
         int sample_idx = sample_from_array(sample_arr, m_problem_size);
-
+        if (sample_idx == -1) {
+            PrintArray(sample_arr, m_problem_size);
+            if (node_min_entropy - edge_min_entropy < 0.001) { // use node arr to sample
+                cout << "node" << endl;
+            }
+            else {
+                cout << "edge" << endl;
+            }
+        }
 
 
 
