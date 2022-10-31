@@ -10,17 +10,17 @@ do
         # 5
         # LLMST
         ./RankingEDAsCEC -i ./PFSP_instance/tai100_5_"$problem".txt\
-                        -o ./PFSP_result/LLMST99/tai100_5_"$problem"_300_LLMST99_"$times".txt\
+                        -o ./PFSP_result/LLMST99/100_5_"$problem"_300_LLMST99_"$times".txt\
                         -s "$times"\
                         -t PFSP\
                         -m LLMST -d C -v 0\
                         -p 300\
                         -e 10000000\
                         -b 0.1 -n 99 &
-
+        
         # GMC
         ./RankingEDAsCEC -i ./PFSP_instance/tai100_5_"$problem".txt\
-                        -o ./PFSP_result/GMC/tai100_5_"$problem"_10_GMC_"$times".txt\
+                        -o ./PFSP_result/GMC/100_5_"$problem"_10_GMC_"$times".txt\
                         -s "$times"\
                         -t PFSP\
                         -m GM -d C -v 0\
@@ -29,7 +29,7 @@ do
 
         # NO
         ./RankingEDAsCEC -i ./PFSP_instance/tai100_5_"$problem".txt\
-                        -o ./PFSP_result/NO/tai100_5_"$problem"_100_NO_"$times".txt\
+                        -o ./PFSP_result/NO/100_5_"$problem"_100_NO_"$times".txt\
                         -s "$times"\
                         -t PFSP\
                         -m NO -d C -v 0\
@@ -39,7 +39,7 @@ do
 
         # ET
         ./RankingEDAsCEC -i ./PFSP_instance/tai100_5_"$problem".txt\
-                        -o ./PFSP_result/ET5/tai100_5_"$problem"_30_ET5_"$times".txt\
+                        -o ./PFSP_result/ET5/100_5_"$problem"_30_ET5_"$times".txt\
                         -s "$times"\
                         -t PFSP\
                         -m ET -d C -v 0\
@@ -50,7 +50,7 @@ do
         # 10
         # LLMST
         ./RankingEDAsCEC -i ./PFSP_instance/tai100_10_"$problem".txt\
-                        -o ./PFSP_result/LLMST99/tai100_10_"$problem"_300_LLMST99_"$times".txt\
+                        -o ./PFSP_result/LLMST99/100_10_"$problem"_300_LLMST99_"$times".txt\
                         -s "$times"\
                         -t PFSP\
                         -m LLMST -d C -v 0\
@@ -60,7 +60,7 @@ do
 
         # GMC
         ./RankingEDAsCEC -i ./PFSP_instance/tai100_10_"$problem".txt\
-                        -o ./PFSP_result/GMC/tai100_10_"$problem"_5_GMC_"$times".txt\
+                        -o ./PFSP_result/GMC/100_10_"$problem"_5_GMC_"$times".txt\
                         -s "$times"\
                         -t PFSP\
                         -m GM -d C -v 0\
@@ -69,7 +69,7 @@ do
 
         # NO
         ./RankingEDAsCEC -i ./PFSP_instance/tai100_10_"$problem".txt\
-                        -o ./PFSP_result/NO/tai100_10_"$problem"_100_NO_"$times".txt\
+                        -o ./PFSP_result/NO/100_10_"$problem"_100_NO_"$times".txt\
                         -s "$times"\
                         -t PFSP\
                         -m NO -d C -v 0\
@@ -79,7 +79,7 @@ do
 
         # ET
         ./RankingEDAsCEC -i ./PFSP_instance/tai100_10_"$problem".txt\
-                        -o ./PFSP_result/ET5/tai100_10_"$problem"_30_ET5_"$times".txt\
+                        -o ./PFSP_result/ET5/100_10_"$problem"_30_ET5_"$times".txt\
                         -s "$times"\
                         -t PFSP\
                         -m ET -d C -v 0\
@@ -91,7 +91,7 @@ do
         # 20
         # LLMST
         ./RankingEDAsCEC -i ./PFSP_instance/tai100_20_"$problem".txt\
-                        -o ./PFSP_result/LLMST99/tai100_20_"$problem"_2000_LLMST99_"$times".txt\
+                        -o ./PFSP_result/LLMST99/100_20_"$problem"_2000_LLMST99_"$times".txt\
                         -s "$times"\
                         -t PFSP\
                         -m LLMST -d C -v 0\
@@ -101,7 +101,7 @@ do
 
         # GMC
         ./RankingEDAsCEC -i ./PFSP_instance/tai100_20_"$problem".txt\
-                        -o ./PFSP_result/GMC/tai100_20_"$problem"_5_GMC_"$times".txt\
+                        -o ./PFSP_result/GMC/100_20_"$problem"_5_GMC_"$times".txt\
                         -s "$times"\
                         -t PFSP\
                         -m GM -d C -v 0\
@@ -110,7 +110,7 @@ do
 
         # NO
         ./RankingEDAsCEC -i ./PFSP_instance/tai100_20_"$problem".txt\
-                        -o ./PFSP_result/NO/tai100_20_"$problem"_300_NO_"$times".txt\
+                        -o ./PFSP_result/NO/100_20_"$problem"_300_NO_"$times".txt\
                         -s "$times"\
                         -t PFSP\
                         -m NO -d C -v 0\
@@ -120,7 +120,7 @@ do
 
         # ET
         ./RankingEDAsCEC -i ./PFSP_instance/tai100_20_"$problem".txt\
-                        -o ./PFSP_result/ET5/tai100_20_"$problem"_30_ET5_"$times".txt\
+                        -o ./PFSP_result/ET5/100_20_"$problem"_30_ET5_"$times".txt\
                         -s "$times"\
                         -t PFSP\
                         -m ET -d C -v 0\
