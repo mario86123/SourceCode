@@ -28,7 +28,7 @@
 /*
  * The constructor.
  */
-RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long int max_evaluations, double b_ratio, double cut_point_count, int previous_sampled_reference_count, int number_of_edge, char* model_type, char* metric_type, int inverse, int seed)
+RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long int max_evaluations, double b_ratio, double cut_point_count, int previous_sampled_reference_count, int number_of_edge, char* model_type, char* metric_type, int inverse, int seed, char * result_file_name)
 {
     //1. standard initializations
     m_problem=problem;
@@ -52,6 +52,7 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     m_inverse=inverse;
     m_seed = seed;
     m_number_of_edge = number_of_edge;
+    m_result_file_name = result_file_name;
     
     //2. initialize the population
     
@@ -106,7 +107,7 @@ RankingEDA::RankingEDA(PBP * problem, int problem_size, int poplation_size, long
     }
     else if (((string)model_type)=="LLMST") // Loss Less MST Model
     {
-        m_model=new CLLMST(m_problem_size, m_sel_size, b_ratio, number_of_edge);
+        m_model=new CLLMST(m_problem_size, m_sel_size, b_ratio, number_of_edge, m_result_file_name);
     }
     else if (((string)model_type)=="FMST") // fast MST Model
     {
@@ -170,22 +171,41 @@ int RankingEDA::Run(char* problem_type){
     ofstream best_fitness_file;
     ofstream avg_fitness_file;
 
+
+    // cout << "m_result_file_name: " << m_result_file_name << endl;
+
+    // TODO: change "PFSP_result" to "PFSP_best_fitness"
+    // m_result_file_name: ./PFSP_result/LLMST19/20_5_100_0.txt
+
+    string result_name("result");
+    string best_fitness_file_name = m_result_file_name;
+    best_fitness_file_name.replace(best_fitness_file_name.find(result_name), result_name.length(), "best_fitness");
+    // cout << "best_fitness_file_name: " << best_fitness_file_name << endl;
+
+
+    string avg_fitness_file_name = m_result_file_name;
+    avg_fitness_file_name.replace(avg_fitness_file_name.find(result_name), result_name.length(), "avg_fitness");
+
+    // cout << "best_fitness_file_name: " << best_fitness_file_name << endl;
+    // cout << "avg_fitness_file_name: " << avg_fitness_file_name << endl;
+
+
+
     // file name: SDF_best_fitness/20_100_0.txt
-    string best_fitness_file_name = problem_type;
-    string avg_fitness_file_name = problem_type;
+    // string best_fitness_file_name = problem_type;
+    // string avg_fitness_file_name = problem_type;
 
 
-    string tmp_model_type = m_model_type;
-    if (tmp_model_type == "LLMST") {
-        tmp_model_type += to_string(m_number_of_edge);
-    }
+    // string tmp_model_type = m_model_type;
+    // if (tmp_model_type == "LLMST") {
+    //     tmp_model_type += to_string(m_number_of_edge);
+    // }
+
+    // best_fitness_file_name += "_best_fitness/" + tmp_model_type + "/" + to_string(m_problem_size) + "_" + to_string(m_pop_size) + "_" + to_string(m_seed) + ".txt";
+    // avg_fitness_file_name += "_avg_fitness/" + tmp_model_type + "/" + to_string(m_problem_size) + "_" + to_string(m_pop_size) + "_" + to_string(m_seed) + ".txt";
 
 
-    best_fitness_file_name += "_best_fitness/" + tmp_model_type + "/" + to_string(m_problem_size) + "_" + to_string(m_pop_size) + "_" + to_string(m_seed) + ".txt";
     best_fitness_file.open(best_fitness_file_name);
-
-
-    avg_fitness_file_name += "_avg_fitness/" + tmp_model_type + "/" + to_string(m_problem_size) + "_" + to_string(m_pop_size) + "_" + to_string(m_seed) + ".txt";
     avg_fitness_file.open(avg_fitness_file_name);
 
     //EDA iteration. Stopping criterion is the maximum number of evaluations performed

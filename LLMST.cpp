@@ -33,7 +33,7 @@ double update_entropy(double original_entropy, double deleted_element, double su
 /*
  * Class constructor.
  */
-CLLMST::CLLMST(int problem_size, int sel_size, double b_ratio, int number_of_edge)
+CLLMST::CLLMST(int problem_size, int sel_size, double b_ratio, int number_of_edge, string result_file_name)
 {
 	m_problem_size=problem_size;
     m_sample_size=sel_size;
@@ -65,16 +65,36 @@ CLLMST::CLLMST(int problem_size, int sel_size, double b_ratio, int number_of_edg
     m_mst_edge_arr = new edge[m_max_num_of_edge - 1];
     m_mst_node_arr = new node[m_problem_size];
 
+    // m_result_file_name = result_file_name;
 
-    // ----- normalize MST edge entropy and node entropy ----- //
-        // edge: n - 1, node: n
+    // TODO: record lowest entropy "node and edge num" and "its entropy" every iteration
+
+    string result_name("result");
+    string entropy_file_name = result_file_name;
+    entropy_file_name.replace(entropy_file_name.find(result_name), result_name.length(), "entropy");
+    // cout << "entropy_file_name: " << entropy_file_name << endl;
+
+    m_entropy_file.open(entropy_file_name);
+
+    // m_max_entropy_lst = new double[m_problem_size + 1];
+
+    // // ----- normalize MST edge entropy and node entropy ----- //
+    //     // edge: n - 1, node: n
     // double max_entropy_arr[m_problem_size];
     // for (int i = 0; i < m_problem_size; i++) {
     //     max_entropy_arr[i] = 1.0;
     // }
 
-    // m_node_max_entropy = calculate_entropy(max_entropy_arr, m_problem_size);
-    // m_edge_max_entropy = calculate_entropy(max_entropy_arr, m_problem_size - 1);
+    // m_max_entropy_lst[5] = entropy([1, 1, 1, 1, 1])
+    // m_max_entropy_lst[2] = entropy([1, 1, 0, 0, 0])
+    // m_max_entropy_lst1] = entropy([1, 0, 0, 0, 0])
+    // m_max_entropy_lst[m_problem_size] = calculate_entropy(max_entropy_arr, m_problem_size);
+    // for (int num_of_element = m_problem_size - 1; num_of_element >= 1; num_of_element --) {
+    //     m_max_entropy_lst[num_of_element] = update_entropy(m_max_entropy_lst[num_of_element + 1], 1.0, num_of_element + 1);
+
+    //     // cout << "num_of_element: " << num_of_element << ",  entropy: " << m_max_entropy_lst[num_of_element] << endl;
+    // }
+    // // m_edge_max_entropy = calculate_entropy(max_entropy_arr, m_problem_size - 1);
 
 }
 
@@ -111,6 +131,9 @@ CLLMST::~CLLMST()
 
     delete[] m_mst_edge_arr;
     delete[] m_mst_node_arr;
+
+    m_entropy_file.close();
+
 
 }
 
@@ -264,13 +287,19 @@ bool CLLMST::Learn(CPopulation * population, int size)
     
 
 
+
     // calculate edge entropy ratio
     for (int i = 0; i < m_max_num_of_edge; ++i) {
-        m_mst_edge_arr[i].entropy = 0;
+        // m_mst_edge_arr[i].entropy = 0;
         m_mst_edge_arr[i].sum = sum_arr(m_edge_matrix[m_mst_edge_arr[i].node_a][m_mst_edge_arr[i].node_b], m_problem_size);
         // cout <<i<<"'s sum: " <<  m_mst_edge_arr[i].sum  << endl;
         // PrintArray(m_edge_matrix[m_mst_edge_arr[i].node_a][m_mst_edge_arr[i].node_b], m_problem_size);
         // cout << m_mst_edge_arr[i].node_a << " " << m_mst_edge_arr[i].node_b << endl<<endl;
+        m_mst_edge_arr[i].entropy = calculate_entropy(m_edge_matrix[m_mst_edge_arr[i].node_a][m_mst_edge_arr[i].node_b], m_problem_size);
+    
+        m_entropy_file << (m_mst_edge_arr[i].node_a + 1) * m_problem_size + m_mst_edge_arr[i].node_b << " " << m_mst_edge_arr[i].entropy << endl;
+
+
 
     }
 
@@ -278,8 +307,18 @@ bool CLLMST::Learn(CPopulation * population, int size)
     for (int i = 0; i < m_problem_size; ++i) {
         m_mst_node_arr[i].node_num = i;
         m_mst_node_arr[i].sum = sum_arr(m_node_matrix[i], m_problem_size);
-        m_mst_node_arr[i].entropy = calculate_entropy_with_known_sum(m_node_matrix[i], m_problem_size, m_mst_node_arr[i].sum);
+        // m_mst_node_arr[i].entropy = calculate_entropy_with_known_sum(m_node_matrix[i], m_problem_size, m_mst_node_arr[i].sum);
+        m_mst_node_arr[i].entropy = calculate_entropy(m_node_matrix[i], m_problem_size);
+
+        m_entropy_file << i << " " << m_mst_node_arr[i].entropy << endl;
     }
+
+    m_entropy_file << endl;
+
+
+
+
+
 
     return true;
 }
@@ -540,7 +579,7 @@ void CLLMST::Sample(int * genes)
 
 
                         mst_edge_lst[edge_num].element_sum = tmp_sum;
-                        mst_edge_lst[edge_num].entropy = calculate_entropy_with_known_sum(tmp_arr, m_problem_size, mst_edge_lst[edge_num].element_sum);
+                        mst_edge_lst[edge_num].entropy = calculate_entropy(tmp_arr, m_problem_size);
                         
                         // cout << "1 tmp_arr: ";
                         // PrintArray(tmp_arr, m_problem_size);
@@ -567,7 +606,7 @@ void CLLMST::Sample(int * genes)
                         }
 
                         mst_edge_lst[edge_num].element_sum = tmp_sum;
-                        mst_edge_lst[edge_num].entropy = calculate_entropy_with_known_sum(tmp_arr, m_problem_size, mst_edge_lst[edge_num].element_sum);
+                        mst_edge_lst[edge_num].entropy = calculate_entropy(tmp_arr, m_problem_size);
                         
                     }
                     mst_edge_lst[edge_num].ref_node_idx = sample_idx;

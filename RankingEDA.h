@@ -96,6 +96,7 @@ public:
     int m_inverse;
     int m_seed;
     int m_number_of_edge;
+    string m_result_file_name;
     
     /*
      * The population
@@ -110,7 +111,7 @@ public:
     /*
      * The constructor.
      */
-	RankingEDA(PBP * problem, int problem_size, int population_size, long int max_evaluations, double b_ratio, double cut_point_count, int previous_sampled_reference_count, int number_of_edge, char * model_type, char * metric_type, int inverse, int seed);
+	RankingEDA(PBP * problem, int problem_size, int population_size, long int max_evaluations, double b_ratio, double cut_point_count, int previous_sampled_reference_count, int number_of_edge, char * model_type, char * metric_type, int inverse, int seed, char *mresult_file_name);
 	
     /*
      * The destructor.

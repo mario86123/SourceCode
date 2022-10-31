@@ -19,7 +19,7 @@ public:
 	/*
 	 * The constructor.
 	 */
-	CLLMST(int problem_size, int sel_size, double b_ratio, int num_of_edge);
+	CLLMST(int problem_size, int sel_size, double b_ratio, int num_of_edge, string result_file_name);
 	
 	/*
 	 * The destructor. It frees the memory allocated at the construction of the Cayley model.
@@ -78,8 +78,12 @@ private:
 
     edge * m_mst_edge_arr;
 
-    // double m_node_max_entropy, m_edge_max_entropy;
+    // double * m_max_entropy_lst;
     int m_max_num_of_edge;
+    // string m_result_file_name;
+    ofstream m_entropy_file;
+
+
     
 };
 

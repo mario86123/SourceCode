@@ -1,0 +1,18 @@
+#PBS -S /bin/bash
+#PBS -q long
+#PBS -l procs=50,mem=10gb,nice=15,walltime=1600:00:00
+#PBS -N LLMST
+#PBS -o LLMST.out
+#PBS -e LLMST.err
+#PBS -m abe
+#PBS -M r10921099@ntu.edu.tw
+
+cd /home/r05h41003/wei/1032/
+
+./SDF_1028_test.sh &
+./TSP_1028_test.sh &
+./QAP_1028_test.sh &
+./PFSP_1028_test.sh &
+./LOP_1028_test.sh
+
+wait
