@@ -74,6 +74,7 @@ private:
         double length;
         double entropy;
         double sum;
+        double distance;
     };
 
     edge * m_mst_edge_arr;

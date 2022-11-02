@@ -239,6 +239,7 @@ bool CLLMST::Learn(CPopulation * population, int size)
             all_edge[count].node_b = other_node_num;
             all_edge[count].length = max_element;
             all_edge[count].entropy = 0.0;
+            all_edge[count].distance = max_element_distance;
 
             count ++;
         }
@@ -297,7 +298,8 @@ bool CLLMST::Learn(CPopulation * population, int size)
         // cout << m_mst_edge_arr[i].node_a << " " << m_mst_edge_arr[i].node_b << endl<<endl;
         m_mst_edge_arr[i].entropy = calculate_entropy(m_edge_matrix[m_mst_edge_arr[i].node_a][m_mst_edge_arr[i].node_b], m_problem_size);
     
-        m_entropy_file << (m_mst_edge_arr[i].node_a + 1) * m_problem_size + m_mst_edge_arr[i].node_b << " " << m_mst_edge_arr[i].entropy << endl;
+        // m_entropy_file << (m_mst_edge_arr[i].node_a + 1) * m_problem_size + m_mst_edge_arr[i].node_b << " " << m_mst_edge_arr[i].entropy << endl;
+        m_entropy_file << m_mst_edge_arr[i].node_a << " " <<  m_mst_edge_arr[i].node_b << " " <<  m_mst_edge_arr[i].distance << " " << m_mst_edge_arr[i].entropy << endl;
 
 
 
