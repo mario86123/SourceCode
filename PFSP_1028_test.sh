@@ -133,3 +133,4 @@ do
 
 done
 # problem instance end
+wait

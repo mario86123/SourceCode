@@ -48,3 +48,4 @@ do
 
 done
 # repeat times end
+wait
